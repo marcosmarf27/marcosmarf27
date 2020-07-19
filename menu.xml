@@ -4,24 +4,12 @@
     <icon>fas:address-card fa-fw</icon>
     <menu>
       <menuitem label="Cadastro de Aluno">
-        <action>AlunoForm</action>
+        <action>AlunoList</action>
         <icon>fas:angle-double-right fa-fw</icon>
-        <menu>
-          <menuitem label="Adicionar">
-            <action>AlunoList</action>
-            <icon>fas:user-tag fa-fw</icon>
-          </menuitem>
-        </menu>
       </menuitem>
       <menuitem label="Cadastro de Empresas">
-        <action>ConcedenteForm</action>
+        <action>ConcedenteList</action>
         <icon>fas:angle-double-right fa-fw</icon>
-        <menu>
-          <menuitem label="Adicionar">
-            <action>ConcedenteList</action>
-            <icon>fas:chevron-circle-down fa-fw</icon>
-          </menuitem>
-        </menu>
       </menuitem>
       <menuitem label="Cadastrar Professor">
         <action>ProfessorFormList</action>

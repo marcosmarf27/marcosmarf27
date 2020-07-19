@@ -79,7 +79,7 @@ class ConcedenteForm extends TPage
         // wrap the page content using vertical box
         $vbox = new TVBox;
         $vbox->style = 'width: 100%';
-        $vbox->add(new TXMLBreadCrumb('menu.xml', __CLASS__));
+        $vbox->add(new TXMLBreadCrumb('menu.xml', 'ConcedenteList'));
         $vbox->add($this->form);
         parent::add($vbox);
     }

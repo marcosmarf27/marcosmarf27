@@ -189,6 +189,13 @@ class EstagioForm extends TPage
                                   '7' => 'Histórico Acadêmico' ]);
         $obs = new TEntry('obs[]');
         $url = new TFile('url[]');
+        $data_envio = new TEntry('data_envio');
+        $data_envio->setEditable(FALSE);
+        $change_action = new TAction(array($this, 'onChangeAction_file'));
+      $tipo_doc->setChangeAction($change_action);
+
+      
+     
       
        
        
@@ -197,6 +204,7 @@ class EstagioForm extends TPage
         $tipo_doc->setSize('100%');
         $obs->setSize('100%');
         $url->setSize('100%');
+        $data_envio->setSize('100%');
         $url->setHeight('50%');
       
 
@@ -210,18 +218,20 @@ class EstagioForm extends TPage
         $this->documentos->width = '100%';
         $this->documentos->addField( '<b>Tipo de Documento</b>', $tipo_doc, ['width' => '20%']);
         $this->documentos->addField( '<b>Observação</b>', $obs,  ['width' => '30%'] );
-        $this->documentos->addField( '<b>Dcoumento</b>', $url,  ['width' => '40%'] );
+        $this->documentos->addField( '<b>Documento</b>', $url,  ['width' => '40%'] );
+        $this->documentos->addField( '<b>Data de envio</b>', $data_envio,  ['width' => '20%'] );
 
         
         $this->form->addField($tipo_doc);
         $this->form->addField($obs);
         $this->form->addField($url);
+        $this->form->addField($data_envio);
     
 
         $this->horarios->enableSorting();
         
         $this->form->addContent( [ new TLabel('Documentos do Estágio:') ], [ $this->documentos ] );
-
+      
         $this->documentos->addHeader();
         $this->documentos->addDetail( new stdClass );
         $this->documentos->addCloneAction();
@@ -395,9 +405,7 @@ class EstagioForm extends TPage
     {
         $this->form->clear();
         
-        $this->horarios->addHeader();
-        $this->horarios->addDetail( new stdClass );
-        $this->horarios->addCloneAction();
+      
     }
     
     /**
@@ -580,6 +588,18 @@ class EstagioForm extends TPage
         }
 
      
+    }
+
+    public static function onChangeAction_file($param){
+      
+
+       
+
+          
+        $data = new stdClass;
+        $data->data_envio = date('d/m/Y');
+        
+        TForm::sendData('form_estagio', $data); 
     }
 }
 

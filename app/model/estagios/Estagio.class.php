@@ -22,17 +22,21 @@ class Estagio extends TRecord
         parent::addAttribute('concedente_id');
         parent::addAttribute('professor_id');
         parent::addAttribute('tipo_estagio_id');
+        parent::addAttribute('apolice');
+        parent::addAttribute('data_ini_a');
+        parent::addAttribute('data_fim_a');
+        parent::addAttribute('valor_transporte');
         parent::addAttribute('data_ini');
         parent::addAttribute('data_fim');
         parent::addAttribute('pagamento_id');
         parent::addAttribute('atividades');
         parent::addAttribute('situacao');
-      
         parent::addAttribute('valor_bolsa');
         parent::addAttribute('carga_horaria');
         parent::addAttribute('system_user_id');
         parent::addAttribute('ano');
         parent::addAttribute('mes');
+      
 
         
 
