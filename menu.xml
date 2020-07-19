@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <menu>
-  <menuitem label="Termos de Estágios">
-    <icon>fas:address-card fa-fw</icon>
-    <menu>
-      <menuitem label="Cadastro de Aluno">
-        <action>AlunoList</action>
-        <icon>fas:angle-double-right fa-fw</icon>
-      </menuitem>
-      <menuitem label="Cadastro de Empresas">
-        <action>ConcedenteList</action>
-        <icon>fas:angle-double-right fa-fw</icon>
-      </menuitem>
-      <menuitem label="Cadastrar Professor">
-        <action>ProfessorFormList</action>
-        <icon>fas:angle-double-right fa-fw</icon>
-      </menuitem>
-    </menu>
-  </menuitem>
   <menuitem label="Cadastrar Termo de Estágio">
     <action>EstagioForm</action>
     <icon>fas:folder-plus fa-fw</icon>
   </menuitem>
   <menuitem label="Cadastros Básicos">
+    <icon>fas:address-card fa-fw</icon>
+    <menu>
+      <menuitem label="Cadastro de Aluno">
+        <action>AlunoList</action>
+        <icon>fas:angle-right fa-fw</icon>
+      </menuitem>
+      <menuitem label="Cadastro de Empresas">
+        <action>ConcedenteList</action>
+        <icon>fas:angle-right fa-fw</icon>
+      </menuitem>
+      <menuitem label="Cadastrar Professor">
+        <action>ProfessorFormList</action>
+        <icon>fas:angle-right fa-fw</icon>
+      </menuitem>
+    </menu>
+  </menuitem>
+  <menuitem label="Configurações de Estágio">
     <icon>fas:cog fa-fw</icon>
     <menu>
       <menuitem label="Cadastro de Curso">

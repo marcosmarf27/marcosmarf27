@@ -423,8 +423,15 @@ class EstagioForm extends TPage
        //Faz as substrações de cada linda
         foreach($param['dia_semana'] as $key => $dia){
             
-        $hora_ini = $param['turno_manha_ini'][$key];
-        $hora_fim = $param['turno_manha_fim'][$key];
+        $hora_ini = empty($param['turno_manha_ini'][$key])? '00:00' : $param['turno_manha_ini'][$key] ;
+        $hora_fim = empty($param['turno_manha_fim'][$key])? '00:00' : $param['turno_manha_fim'][$key] ;
+if(strlen($hora_ini) < 3 or strlen($hora_fim) < 3){
+
+    new TMessage('error', 'Intervalos inválido, use formado 24 horas Exemplo - 13:oo a 16:30');
+    exit;
+
+}
+     
         if(empty($hora_ini) and empty($hora_fim)){
 
             $horas = 00;
@@ -449,10 +456,18 @@ class EstagioForm extends TPage
             new TMessage('error', 'Intervalos inválido, use formado 24 horas Exemplo - 13:oo a 16:30');
             exit;
         }
+
+        $hora_ini = empty($param['turno_tarde_ini'][$key])? '00:00' : $param['turno_tarde_ini'][$key] ;
+        $hora_fim = empty($param['turno_tarde_fim'][$key])? '00:00' : $param['turno_tarde_fim'][$key] ;
+if(strlen($hora_ini) < 3 or strlen($hora_fim) < 3){
+
+    new TMessage('error', 'Intervalos inválido, use formado 24 horas Exemplo - 13:oo a 16:30');
+    exit;
+
+}
         
         
-        $hora_ini = $param['turno_tarde_ini'][$key];
-        $hora_fim = $param['turno_tarde_fim'][$key];
+    
 
         if(empty($hora_ini) and empty($hora_fim)){
 
@@ -479,8 +494,16 @@ class EstagioForm extends TPage
         exit;
     }
 
-        $hora_ini = $param['turno_noite_ini'][$key];
-        $hora_fim = $param['turno_noite_fim'][$key];
+    $hora_ini = empty($param['turno_noite_ini'][$key])? '00:00' : $param['turno_noite_ini'][$key] ;
+    $hora_fim = empty($param['turno_noite_fim'][$key])? '00:00' : $param['turno_noite_fim'][$key] ;
+if(strlen($hora_ini) < 3 or strlen($hora_fim) < 3){
+
+new TMessage('error', 'Intervalos inválido, use formado 24 horas Exemplo - 13:oo a 16:30');
+exit;
+
+}
+
+       
 
         if(empty($hora_ini) and empty($hora_fim)){
 
