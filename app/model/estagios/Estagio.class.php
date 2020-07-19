@@ -1,0 +1,98 @@
+<?php
+/**
+
+ * @author  Marcos  
+ */
+class Estagio extends TRecord
+{
+    const TABLENAME = 'ufc_estagio';
+    const PRIMARYKEY= 'id';
+    const IDPOLICY =  'max'; // {max, serial}
+
+    private $aluno;
+    private $concedente;
+    private $professor;
+    private $tipo_estagio;
+    private $pagamento;
+    
+    public function __construct($id = NULL)
+    {
+        parent::__construct($id);
+        parent::addAttribute('aluno_id');
+        parent::addAttribute('concedente_id');
+        parent::addAttribute('professor_id');
+        parent::addAttribute('tipo_estagio_id');
+        parent::addAttribute('data_ini');
+        parent::addAttribute('data_fim');
+        parent::addAttribute('pagamento_id');
+        parent::addAttribute('atividades');
+        parent::addAttribute('situacao');
+      
+        parent::addAttribute('valor_bolsa');
+        parent::addAttribute('carga_horaria');
+        parent::addAttribute('system_user_id');
+        parent::addAttribute('ano');
+        parent::addAttribute('mes');
+
+        
+
+    }
+
+    function get_aluno()
+    {
+        // instantiates City, load $this->city_id
+        if (empty($this->aluno))
+        {
+            $this->aluno = new Aluno($this->aluno_id);
+        }
+        
+        // returns the City Active Record
+        return $this->aluno;
+    }
+    function get_professor()
+    {
+        // instantiates City, load $this->city_id
+        if (empty($this->professsor))
+        {
+            $this->professor = new Professor($this->professor_id);
+        }
+        
+        // returns the City Active Record
+        return $this->professor;
+    }
+    function get_concedente()
+    {
+        // instantiates City, load $this->city_id
+        if (empty($this->concedente))
+        {
+            $this->concedente = new Concedente($this->concedente_id);
+        }
+        
+        // returns the City Active Record
+        return $this->concedente;
+    }
+    function get_tipo_estagio()
+    {
+        // instantiates City, load $this->city_id
+        if (empty($this->tipo_estagio))
+        {
+            $this->tipo_estagio = new Tipo($this->tipo_estagio_id);
+        }
+        
+        // returns the City Active Record
+        return $this->tipo_estagio;
+    }
+    function get_pagamento()
+    {
+        // instantiates City, load $this->city_id
+        if (empty($this->pagamento))
+        {
+            $this->pagamento = new Pagamento($this->pagamento_id);
+        }
+        
+        // returns the City Active Record
+        return $this->pagamento;
+    }
+    
+    
+}
