@@ -158,8 +158,9 @@ class EstagioForm extends TPage
 
         
         $this->horarios = new TFieldList;
+        $this->horarios->generateAria();
         $this->horarios->width = '100%';
-        $this->name = 'horarios_list';
+        $this->horarios->name  = 'horarios_list';
         $this->horarios->addField( '<b>Dia da Semana</b>', $dia_semana, ['width' => '15%']);
         $this->horarios->addField( '<b>Manhã Inicio</b>', $turno_manha_ini );
         $this->horarios->addField( '<b>Manhã Término</b>', $turno_manha_fim );
@@ -181,14 +182,7 @@ class EstagioForm extends TPage
       
     
       
-        $button = new TButton('add_h');
-        $button->setAction(new TAction(array($this, 'onClear')), 'Adicionar Horários');
-        $button->setImage('fa:folder-open blue');
-
-        $this->form->addField($button);
-
-       
-        $this->form->addContent( [ $button ] );
+     
         $this->form->addContent( [ new TLabel('Horarios:') ], [ $this->horarios ] );
 
      
@@ -236,8 +230,9 @@ class EstagioForm extends TPage
 
         
         $this->documentos = new TFieldList;
+        $this->documentos->generateAria();
         $this->documentos->width = '100%';
-        $this->name = 'documentos_list';
+        $this->documentos->name  = 'documentos_list';
         $this->documentos->addField( '<b>Tipo de Documento</b>', $tipo_doc, ['width' => '20%']);
         $this->documentos->addField( '<b>Observação</b>', $obs,  ['width' => '30%'] );
         $this->documentos->addField( '<b>Documento</b>', $url,  ['width' => '40%'] );
@@ -464,7 +459,7 @@ class EstagioForm extends TPage
 
                    
                  
-                   
+                    //TFieldList::clear('horarios_list');
                     $this->horarios->addHeader();
                    
                     foreach ($horarios as $horario)
@@ -495,7 +490,7 @@ class EstagioForm extends TPage
                 if ($documentos)
                 {
                     
-                   // TFieldList::clear('horariso_list');
+                   // TFieldList::clear('documentos_list');
                     $this->documentos->addHeader();
                    
                     foreach ($documentos as $documento)
@@ -546,18 +541,27 @@ class EstagioForm extends TPage
         $this->form->clear();
         
 
-        $this->horarios->enableSorting();
+        
         $this->horarios->addHeader();
         $this->horarios->addDetail( new stdClass );
+      
+        $this->horarios->addCloneAction();
 
-        $this->documentos->enableSorting();
+
+         
         $this->documentos->addHeader();
         $this->documentos->addDetail( new stdClass );
+      
+        $this->documentos->addCloneAction();
+        
        
        
        
       
+
     }
+
+  
     
     /**
      * Close side panel

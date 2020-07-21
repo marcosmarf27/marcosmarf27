@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <menu>
   <menuitem label="Cadastrar Termo de Estágio">
-    <action>EstagioForm</action>
+    <action>EstagioForm#method=onClear</action>
     <icon>fas:folder-plus fa-fw</icon>
   </menuitem>
   <menuitem label="Cadastros Básicos">
