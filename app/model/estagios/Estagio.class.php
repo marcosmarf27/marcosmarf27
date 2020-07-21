@@ -97,6 +97,22 @@ class Estagio extends TRecord
         // returns the City Active Record
         return $this->pagamento;
     }
+
+    public function getHorarios(){
+
+      return  $horarios = Horario::where('estagio_id', '=', $this->id)->load();
+                                
+                                 
+
+
+    }
+
+    public function getDocumentos(){
+
+        return  $documentos = Documento::where('estagio_id', '=', $this->id)->load();
+
+        
+    }
     
     
 }
