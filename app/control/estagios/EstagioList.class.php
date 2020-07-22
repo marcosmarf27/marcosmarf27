@@ -30,7 +30,7 @@ class EstagioList extends TPage
         
         $this->setDatabase('estagio');          // defines the database
         $this->setActiveRecord('Estagio');         // defines the active record
-        $this->setDefaultOrder('id', 'asc');    // defines the default order
+        $this->setDefaultOrder('id', 'desc');    // defines the default order
         $this->addFilterField('id', '=', 'id'); 
         $this->addFilterField('(SELECT matricula FROM ufc_aluno WHERE ufc_aluno.id = aluno_id)', '=', 'matricula');
         $this->addFilterField('situacao', '=', 'situacao');// filterField, operator, formField
@@ -77,7 +77,7 @@ class EstagioList extends TPage
         
         // add the search form actions
         $this->form->addAction('Procurar', new TAction([$this, 'onSearch']), 'fa:search');
-        $this->form->addActionLink('Cadastrar novo termo',  new TAction(['EstagioForm', 'onClear']), 'fa:plus green');
+        $this->form->addActionLink('Cadastrar novo termo',  new TAction(['EstagioFormAdmin', 'onClear']), 'fa:plus green');
         $this->form->addActionLink( 'Limpar', new TAction([$this, 'Limpar']), 'fa:eraser red' );
         
         // creates a DataGrid
@@ -159,12 +159,16 @@ class EstagioList extends TPage
         });
 
        // $action_view   = new TDataGridAction(['SaleSidePanelView', 'onView'],   ['key' => '{id}', 'register_state' => 'false'] );
-        $action_edit   = new TDataGridAction(['EstagioForm', 'onEdit'],   ['key' => '{id}',  'register_state' => 'false']);
+        $action_edit   = new TDataGridAction(['EstagioFormAdmin', 'onEdit'],   ['key' => '{id}',  'register_state' => 'false']);
+        $action_edit_a   = new TDataGridAction(['AlunoFormWindow', 'onEdit'],   ['id' => '{aluno_id}',  'register_state' => 'false']);
+        $action_edit_c   = new TDataGridAction(['ConcedenteFormWindow', 'onEdit'],   ['id' => '{concedente_id}',  'register_state' => 'false']);
         $action_delete = new TDataGridAction([$this, 'onDelete'],   ['key' => '{id}'] );
         
         //$this->datagrid->addAction($action_view, _t('View details'), 'fa:search green fa-fw');
-        $this->datagrid->addAction($action_edit, 'Editar',   'far:edit blue fa-fw');
-        $this->datagrid->addAction($action_delete, 'Deletar', 'far:trash-alt red fa-fw');
+        $this->datagrid->addAction($action_edit, 'Editar Termo',   'far:edit blue fa-fw');
+        $this->datagrid->addAction($action_delete, 'Deletar Termo', 'far:trash-alt red fa-fw');
+        $this->datagrid->addAction($action_edit_a, 'Cadastro Aluno',   'far:user blue fa-fw');
+        $this->datagrid->addAction($action_edit_c, 'Cadastro Empresa', 'fas:address-card blue fa-fw');
         
         // create the datagrid model
         $this->datagrid->createModel();

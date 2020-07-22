@@ -19,7 +19,7 @@ use Adianti\Widget\Form\TText;
  * @copyright  Copyright (c) 2006 Adianti Solutions Ltd. (http://www.adianti.com.br)
  * @license    http://www.adianti.com.br/framework-license
  */
-class EstagioForm extends TPage
+class EstagioFormAdmin extends TWindow
 {
     private $form; // form
     private $horarios;
@@ -265,6 +265,8 @@ class EstagioForm extends TPage
         
         $this->form->addAction( 'Salvar Termo', new TAction([$this, 'onSave']), 'fa:save green' );
         $this->form->addActionLink( 'Novo', new TAction([$this, 'onClear']), 'fa:eraser red' );
+        $this->form->addAction( 'Registrar Pendência', new TAction([$this, 'onSave']), 'fa:edit blue' );
+      
         
         
         // add the form inside the page
@@ -421,7 +423,7 @@ class EstagioForm extends TPage
             
            
             
-           SystemNotification::register(1, 'Novo termo recebido', 'Avaliar Termo de Estágio', 'class=EstagioFormAdmin&method=onEdit&id='. $estagio->id, 'Avaliar', 'fa fa-list blue alt');
+           SystemNotification::register(1, 'Novo termo recebido', 'Avaliar Termo de Estágio', 'class=EstagioForm&method=onEdit&id='. $estagio->id, 'Avaliar', 'fa fa-list blue alt');
             
             // shows the success message
             new TMessage('info', 'Registro Salvo com Sucesso!');
