@@ -4,6 +4,10 @@
     <action>EstagioForm#method=onClear</action>
     <icon>fas:folder-plus fa-fw</icon>
   </menuitem>
+  <menuitem label="Termos recebidos">
+    <action>EstagioList</action>
+    <icon>fas:align-left fa-fw</icon>
+  </menuitem>
   <menuitem label="Cadastros Básicos">
     <icon>fas:address-card fa-fw</icon>
     <menu>

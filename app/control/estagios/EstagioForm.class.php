@@ -1,5 +1,6 @@
 <?php
 
+use Adianti\Control\TWindow;
 use Adianti\Database\TTransaction;
 use Adianti\Registry\TSession;
 use Adianti\Widget\Dialog\TMessage;
@@ -18,7 +19,7 @@ use Adianti\Widget\Form\TText;
  * @copyright  Copyright (c) 2006 Adianti Solutions Ltd. (http://www.adianti.com.br)
  * @license    http://www.adianti.com.br/framework-license
  */
-class EstagioForm extends TPage
+class EstagioForm extends TWindow
 {
     private $form; // form
     private $horarios;
@@ -30,6 +31,11 @@ class EstagioForm extends TPage
     function __construct()
     {
         parent::__construct();
+        parent::setSize(0.8, null);
+        parent::removePadding();
+      
+        parent::disableEscape();
+        
         
      
         $this->form = new BootstrapFormBuilder('form_estagio');
@@ -58,15 +64,16 @@ class EstagioForm extends TPage
         
         
         
-        $ano_atual = date("Y");
+  /*       $ano_atual = date("Y");
         $mes_atual = date("m");
+        $ano->setValue($ano_atual);
+        $mes->setValue($mes_atual); */
 
         $tipo_estagio_id->setChangeAction(new TAction(array($this, 'onChangeType')));
 
         self::onChangeType( ['_field_value' => '1'] );
         
-        $ano->setValue($ano_atual);
-        $mes->setValue($mes_atual);
+       
        
         $code->setEditable(FALSE);
         $ano->setEditable(FALSE);
@@ -200,8 +207,10 @@ class EstagioForm extends TPage
                                   '5' => 'Relatório',
                                   '6' => 'Atestado de Matricula',
                                   '7' => 'Histórico Acadêmico' ]);
-        $obs = new TEntry('obs[]');
+       // $obs = new TEntry('obs[]');
         $url = new TFile('url[]');
+        $url->setDisplayMode('file');
+       // $url->enableFileHandling();
         $data_envio = new TDate('data_envio[]');
         $data_envio->setMask('dd/mm/yyyy');
         $data_envio->setDatabaseMask('yyyy-mm-dd');
@@ -217,10 +226,10 @@ class EstagioForm extends TPage
        $url->setAllowedExtensions(['pdf']);
        
         $tipo_doc->setSize('100%');
-        $obs->setSize('100%');
+       // $obs->setSize('100%');
         $url->setSize('100%');
         $data_envio->setSize('100%');
-        $url->setHeight('50%');
+        $url->setHeight('100%');
       
 
 
@@ -234,13 +243,13 @@ class EstagioForm extends TPage
         $this->documentos->width = '100%';
         $this->documentos->name  = 'documentos_list';
         $this->documentos->addField( '<b>Tipo de Documento</b>', $tipo_doc, ['width' => '20%']);
-        $this->documentos->addField( '<b>Observação</b>', $obs,  ['width' => '30%'] );
-        $this->documentos->addField( '<b>Documento</b>', $url,  ['width' => '40%'] );
-        $this->documentos->addField( '<b>Data de envio</b>', $data_envio,  ['width' => '20%'] );
+      //  $this->documentos->addField( '<b>Observação</b>', $obs,  ['width' => '30%'] );
+        $this->documentos->addField( '<b>Documento</b>', $url,  ['width' => '60%'] );
+        $this->documentos->addField( '<b>Data de envio</b>', $data_envio,  ['width' => '15%'] );
 
         
         $this->form->addField($tipo_doc);
-        $this->form->addField($obs);
+      //  $this->form->addField($obs);
         $this->form->addField($url);
         $this->form->addField($data_envio);
     
@@ -266,47 +275,49 @@ class EstagioForm extends TPage
      * method onSave
      * Executed whenever the user clicks at the save button
      */
-    public static function onSave($param)
+    public  function onSave($param)
     {
         try
         {
 
-
+            TTransaction::open('estagio');
            
             TSession::getValue('userid');
-            $param['system_user_id'] =  TSession::getValue('userid');
-            $param['situacao'] = '1';
-            $param['valor_bolsa'] = self::tofloat($param['valor_bolsa']);
-            $param['valor_transporte'] =self::tofloat( $param['valor_transporte']) ;
 
-            echo "<pre>";
+            $dados = $this->form->getData();
+            $dados->system_user_id=  TSession::getValue('userid');
+            $dados->situacao = '1';
+            $dados->valor_bolsa = self::tofloat($dados->valor_bolsa);
+            $dados->valor_transporte =self::tofloat( $dados->valor_transporte) ;
 
-            print_r($param);
+         /*    echo "<pre>";
+
+            print_r($dados);
             
-            echo "</pre>";
+            echo "</pre>"; */
            
 
        
             
          
-            TTransaction::open('estagio');
+           
             
             
             
             $estagio = new Estagio;
-            $estagio->fromArray( $param );
+            $estagio->fromArray( (arraY) $dados );
             $estagio->store();
 
 
 
-            $data = new stdClass;
+          /*   $data = new stdClass;
             $data->id = $estagio->id;
-            TForm::sendData('form_estagio', $data);
+            TForm::sendData('form_estagio', $data); */
 
         
             
            
-            Documento::where('estagio_id', '=', $estagio->id)->delete();
+           
                         
                         
             
@@ -316,24 +327,24 @@ class EstagioForm extends TPage
 
          
             
-            if( !empty($param['dia_semana']) AND is_array($param['dia_semana']) )
+            if( !empty($dados->dia_semana) AND is_array($dados->dia_semana) )
             {
 
                 Horario::where('estagio_id', '=', $estagio->id)->delete();
-                foreach( $param['dia_semana'] as $row => $dia_semana)
+                foreach( $dados->dia_semana as $row => $dia_semana)
                 {
                     if ($dia_semana)
                     {
                         $horario = new Horario();
                         $horario->dia_semana  = $dia_semana;
-                        $horario->turno_manha_ini = $param['turno_manha_ini'][$row];
-                        $horario->turno_manha_fim = $param['turno_manha_fim'][$row];
-                        $horario->turno_tarde_ini = $param['turno_tarde_ini'][$row];
-                        $horario->turno_tarde_fim = $param['turno_tarde_fim'][$row];
-                        $horario->turno_noite_ini = $param['turno_noite_ini'][$row];
-                        $horario->turno_noite_fim = $param['turno_noite_fim'][$row];
-                        $horario->turno_tarde_ini = $param['turno_tarde_ini'][$row];
-                        $horario->total_dia = $param['total_dia'][$row];
+                        $horario->turno_manha_ini = $dados->turno_manha_ini[$row];
+                        $horario->turno_manha_fim = $dados->turno_manha_fim[$row];
+                        $horario->turno_tarde_ini = $dados->turno_tarde_ini[$row];
+                        $horario->turno_tarde_fim = $dados->turno_tarde_fim[$row];
+                        $horario->turno_noite_ini = $dados->turno_noite_ini[$row];
+                        $horario->turno_noite_fim = $dados->turno_noite_fim[$row];
+                        $horario->turno_tarde_ini = $dados->turno_tarde_ini[$row];
+                        $horario->total_dia = $dados->total_dia[$row];
                         $horario->estagio_id = $estagio->id;
                         $horario->store();
                         
@@ -344,23 +355,25 @@ class EstagioForm extends TPage
                 }
             }
 
-            if( !empty($param['tipo_doc']) AND is_array($param['tipo_doc']) )
+            if( !empty($dados->tipo_doc) AND is_array($dados->tipo_doc) )
             {
 
                 Documento::where('estagio_id', '=', $estagio->id)->delete();
-                foreach( $param['tipo_doc'] as $row => $tipo_doc)
+                foreach( $dados->tipo_doc as $row => $tipo_doc)
                 {
                     if ($tipo_doc)
                     {
                         $documento = new Documento();
                         $documento->tipo_doc  = $tipo_doc;
-                        $documento->obs = $param['obs'][$row];
-                        $arquivo = $param['url'][$row];
+                      //  $documento->obs = $param['obs'][$row];
+                        $arquivo = $dados->url[$row];
                         $target_file = '';
                         
                         if ($arquivo)
                         {
                             $source_file   = 'tmp/'.$arquivo;
+
+                          
                            // $target_file   = 'files/estagios/' . TSession::getValue('login') . '-' . md5(uniqid()) . '-' . time() . '.pdf';
                             $finfo         = new finfo(FILEINFO_MIME_TYPE);
                             
@@ -387,7 +400,7 @@ class EstagioForm extends TPage
                        }
                        
                  
-                        $documento->data_envio = $param['data_envio'][$row];
+                        $documento->data_envio = $dados->data_envio[$row];
                         $documento->estagio_id = $estagio->id;
                 
                    
@@ -401,9 +414,9 @@ class EstagioForm extends TPage
                 }
             }
 
-            $data = new stdClass;
-            $data->id = $estagio->id;
-            TForm::sendData('form_estagio', $data);
+            $dados->id = $estagio->id;
+          
+           $this->form->setData($dados);
 
             
            
@@ -440,7 +453,7 @@ class EstagioForm extends TPage
 
                 $horarios = $estagio->getHorarios();
                 $documentos = $estagio->getDocumentos();
-
+/* 
              echo "<pre> ";  
              print_r($param);
 
@@ -452,7 +465,7 @@ class EstagioForm extends TPage
              
              echo "</pre>";
                 // load the horarios (composition)
-                
+                 */
                 
                 if ($horarios)
                 {
@@ -497,8 +510,9 @@ class EstagioForm extends TPage
                     {
                         $documento_detail = new stdClass;
                         $documento_detail->tipo_doc  = $documento->tipo_doc;
-                        $documento_detail->obs = $documento->obs;
+                      //  $documento_detail->obs = $documento->obs;
                         $documento_detail->url = $documento->url;
+                       
                         $documento_detail->data_envio = $documento->data_envio;
                
                         
@@ -539,7 +553,14 @@ class EstagioForm extends TPage
     public  function onClear($param)
     {
         $this->form->clear();
-        
+
+        $dados = $this->form->getData();
+        $dados->mes = date('m');
+        $dados->ano = date('Y');
+
+        $this->form->setData($dados);
+      
+      
 
         
         $this->horarios->addHeader();
@@ -803,6 +824,7 @@ exit;
         );
     }
 
+   
    
 }
 
