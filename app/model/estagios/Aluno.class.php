@@ -21,6 +21,7 @@ class Aluno extends TRecord
         parent::addAttribute('telefone');
         parent::addAttribute('cidade_id');
         parent::addAttribute('endereco');
+        parent::addAttribute('system_user_id');
 
     }
 

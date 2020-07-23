@@ -1,5 +1,6 @@
 <?php
 
+use Adianti\Registry\TSession;
 use Adianti\Widget\Form\TCombo;
 
 /**
@@ -23,9 +24,22 @@ class EstagioList extends TPage
     /**
      * Page constructor
      */
-    public function __construct()
+    public function __construct($param)
     {
         parent::__construct();
+
+       
+        if (isset($param['termo_id'])){
+
+            $dados = new stdClass;
+            $dados->id = $param['termo_id'];
+            TSession::setValue('EstagioList_filter_data', $dados);
+            $termo =  TSession::getValue('EstagioList_filter_data');
+           
+            $criteria = new TCriteria();
+            $criteria->add(new TFilter('id','=', $termo->id));
+            $this->setCriteria($criteria);
+        }
         
         
         $this->setDatabase('estagio');          // defines the database
@@ -83,6 +97,7 @@ class EstagioList extends TPage
         // creates a DataGrid
         $this->datagrid = new BootstrapDatagridWrapper(new TDataGrid);
         $this->datagrid->width = '100%';
+     
         
         // creates the datagrid columns
         $column_id       = new TDataGridColumn('id', 'Id', 'center', '5%');
@@ -163,12 +178,50 @@ class EstagioList extends TPage
         $action_edit_a   = new TDataGridAction(['AlunoFormWindow', 'onEdit'],   ['id' => '{aluno_id}',  'register_state' => 'false']);
         $action_edit_c   = new TDataGridAction(['ConcedenteFormWindow', 'onEdit'],   ['id' => '{concedente_id}',  'register_state' => 'false']);
         $action_delete = new TDataGridAction([$this, 'onDelete'],   ['key' => '{id}'] );
+
+        $action_registra_pendencia  = new TDataGridAction(['PendenciaFormList', 'registraPendencia'],   ['estagio_id' => '{id}', 'usuario_id' => '{system_user_id}', 'register_state' => 'false']);
+        $action_registra_documento  = new TDataGridAction(['DocumentoFormList', 'registraDocumento'],   ['estagio_id' => '{id}', 'usuario_id' => '{system_user_id}', 'register_state' => 'false']);
+        $action_edit->setLabel('Editar Termo');
+        $action_edit->setImage('far:edit blue fa-fw');
         
-        //$this->datagrid->addAction($action_view, _t('View details'), 'fa:search green fa-fw');
+        $action_delete->setLabel('Deletar Termo');
+        $action_delete->setImage('far:trash-alt red fa-fw');
+        
+        $action_edit_a->setLabel('Cadastro Aluno');
+        $action_edit_a->setImage('far:user blue fa-fw');
+        
+        $action_edit_c->setLabel('Cadastro Empresa');
+        $action_edit_c->setImage('fas:address-card blue fa-fw');
+
+        $action_registra_pendencia->setLabel('Registrar Pendência');
+        $action_registra_pendencia->setImage('far:edit blue fa-fw');
+
+        $action_registra_documento->setLabel('Ver documentos');
+        $action_registra_documento->setImage('fa:search blue');
+        
+        
+        $action_group = new TDataGridActionGroup('Realizar Ação', 'fa:th');
+        
+        $action_group->addHeader('>>Edição<<');
+        $action_group->addAction($action_edit);
+        $action_group->addAction($action_delete);
+        $action_group->addSeparator();
+        $action_group->addHeader('>>Cadastros<<');
+        $action_group->addAction($action_edit_a);
+        $action_group->addAction($action_edit_c);
+        $action_group->addAction($action_registra_documento);
+        $action_group->addHeader('>>Avaliação<<');
+        $action_group->addAction($action_registra_pendencia);
+        
+        // add the actions to the datagrid
+        $this->datagrid->addActionGroup($action_group);
+        
+        
+     /*    //$this->datagrid->addAction($action_view, _t('View details'), 'fa:search green fa-fw');
         $this->datagrid->addAction($action_edit, 'Editar Termo',   'far:edit blue fa-fw');
         $this->datagrid->addAction($action_delete, 'Deletar Termo', 'far:trash-alt red fa-fw');
         $this->datagrid->addAction($action_edit_a, 'Cadastro Aluno',   'far:user blue fa-fw');
-        $this->datagrid->addAction($action_edit_c, 'Cadastro Empresa', 'fas:address-card blue fa-fw');
+        $this->datagrid->addAction($action_edit_c, 'Cadastro Empresa', 'fas:address-card blue fa-fw'); */
         
         // create the datagrid model
         $this->datagrid->createModel();
@@ -191,6 +244,10 @@ class EstagioList extends TPage
     {
         $this->form->clear();
         $this->onSearch();
+    }
+
+    public function abrir($param){
+     
     }
 
     

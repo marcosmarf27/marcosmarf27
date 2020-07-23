@@ -31,10 +31,10 @@ class EstagioForm extends TPage
     function __construct()
     {
         parent::__construct();
-        parent::setSize(0.8, null);
-        parent::removePadding();
+       // parent::setSize(0.8, null);
+        //parent::removePadding();
       
-        parent::disableEscape();
+       // parent::disableEscape();
         
         
      
@@ -421,7 +421,7 @@ class EstagioForm extends TPage
             
            
             
-           SystemNotification::register(1, 'Novo termo recebido', 'Avaliar Termo de Estágio', 'class=EstagioFormAdmin&method=onEdit&id='. $estagio->id, 'Avaliar', 'fa fa-list blue alt');
+           SystemNotification::register(1, 'Novo termo recebido', 'Avaliar Termo de Estágio', 'class=EstagioList&method=abrir&termo_id='. $estagio->id, 'Avaliar', 'fa fa-list blue alt');
             
             // shows the success message
             new TMessage('info', 'Registro Salvo com Sucesso!');

@@ -24,8 +24,8 @@ class TMail
         
         $this->pm->SMTPOptions = array(
                 'ssl' => array(
-                    'verify_peer' => false,
-                    'verify_peer_name' => false,
+                    'verify_peer' => true,
+                    'verify_peer_name' => true,
                     'allow_self_signed' => true
                 )
             );
