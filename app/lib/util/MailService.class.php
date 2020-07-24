@@ -24,7 +24,7 @@ class MailService
         TTransaction::close();
         
         $mail = new TMail;
-        $mail->setFrom( trim($preferences['mail_from']), APPLICATION_NAME );
+        $mail->setFrom( trim($preferences['mail_from']), APPLICATION_NAME . ' UFC Campus Russas' );
         
         if (is_string($tos))
         {
