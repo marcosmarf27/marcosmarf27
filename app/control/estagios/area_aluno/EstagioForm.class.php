@@ -60,9 +60,13 @@ class EstagioForm extends TPage
         $ano       = new TEntry('ano');
         $mes       = new TEntry('mes');
         $valor_bolsa       = new TEntry('valor_bolsa');
+        $aluno_id->placeholder = 'Digite para buscar...';
+        $concedente_id->placeholder = 'Digite para buscar...';
+        $professor_id->placeholder = 'Digite para buscar...';
 
         
-        
+        $data_ini->placeholder = 'clique aqui';
+        $data_fim->placeholder = 'clique aqui';
         
   /*       $ano_atual = date("Y");
         $mes_atual = date("m");
@@ -84,6 +88,7 @@ class EstagioForm extends TPage
         $data_ini->setDatabaseMask('yyyy-mm-dd');
         $data_ini->setDatabaseMask('yyyy-mm-dd');
         $valor_bolsa->setNumericMask(2, ',', '.', true);
+        $valor_bolsa->placeholder = '0.000,00';
 
         $data_ini_a->setMask('dd/mm/yyyy');
         $data_fim_a->setMask('dd/mm/yyyy');
@@ -91,6 +96,15 @@ class EstagioForm extends TPage
         $data_ini_a->setDatabaseMask('yyyy-mm-dd');
         $valor_transporte->setNumericMask(2, ',', '.', true);
         $valor_transporte->style = "text-align: left";
+
+        $carga_horaria->setMask('99:99');
+        $carga_horaria->placeholder = '00:00';
+
+        $change_action_carga = new TAction(array($this, 'cargaAjustar'));
+        $carga_horaria->setExitAction($change_action_carga);
+
+
+        
         
         
     
@@ -264,7 +278,20 @@ class EstagioForm extends TPage
         $aluno_id->addValidation( 'Aluno', new TRequiredValidator );
         $professor_id->addValidation( 'Professor', new TRequiredValidator );
         $concedente_id->addValidation( 'Empresa', new TRequiredValidator);
-        $tipo_doc->addValidation( 'Tipo de Documento', new TRequiredListValidator);
+        $tipo_estagio_id->addValidation( 'Tipo de Estágio', new TRequiredValidator);
+        $concedente_id->addValidation( 'Empresa', new TRequiredValidator);
+        $data_ini->addValidation( 'Data de Inicio', new TRequiredValidator);
+        $data_fim->addValidation( 'Data de Término', new TRequiredValidator);
+        $carga_horaria->addValidation( 'Carga Horária', new  TMinLengthValidator, array(4));
+       
+        $carga_horaria->addValidation( 'Carga Horária(00:00)', new TRequiredValidator);
+        $atividades->addValidation( 'Plano de Atividades', new TRequiredValidator);
+        $dia_semana->addValidation( 'Horários', new TRequiredValidator);
+
+      
+    
+       
+        $tipo_doc->addValidation( 'Documentos', new TRequiredListValidator);
         
         
         $this->form->addAction( 'Salvar Termo', new TAction([$this, 'onSave'], [ 'static' => '1']), 'fa:save green' );
@@ -830,6 +857,49 @@ exit;
             preg_replace("/[^0-9]/", "", substr($num, 0, $sep)) . '.' .
             preg_replace("/[^0-9]/", "", substr($num, $sep+1, strlen($num)))
         );
+    }
+
+    public static function cargaAjustar($param){
+            $carga = $param['_field_value'];
+
+           // var_dump($carga);
+        
+       if(strlen($carga) <= 3) {
+
+        $carga_nova = str_pad($carga , 4 , '0' , STR_PAD_RIGHT);
+ //  echo 'entrou if 1';
+        $horas = substr($carga_nova, 0 , 2);
+        $minutos = substr($carga_nova,  -2);
+       
+        $carga_nova2 = $horas.':'.$minutos;
+        $data = new stdClass;
+        $data->carga_horaria = $carga_nova2;
+        TForm::sendData('form_estagio', $data); 
+
+       }
+       
+      
+            $findme   = ':';
+            $pos = strpos($carga, $findme);
+
+          //  var_dump($pos);
+       if(($pos == 2 ) and (strlen($carga) == 4) ){
+
+      //  echo 'entrou if 2';
+
+       
+            new TMessage('error',   'Use o formato 00:00 para informar carga horária');
+        
+
+
+       }
+            
+
+          
+      
+        
+       
+
     }
 
    
