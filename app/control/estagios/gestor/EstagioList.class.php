@@ -1,6 +1,8 @@
 <?php
 
+use Adianti\Database\TTransaction;
 use Adianti\Registry\TSession;
+use Adianti\Widget\Dialog\TMessage;
 use Adianti\Widget\Form\TCombo;
 
 /**
@@ -97,10 +99,11 @@ class EstagioList extends TPage
         // creates a DataGrid
         $this->datagrid = new BootstrapDatagridWrapper(new TDataGrid);
         $this->datagrid->width = '100%';
+        $this->datagrid->height = '500px';
      
         
         // creates the datagrid columns
-        $column_id       = new TDataGridColumn('id', 'Id', 'center', '5%');
+        $column_id       = new TDataGridColumn('id', 'nº Estágio', 'center', '5%');
         $column_situacao    = new TDataGridColumn('situacao', 'Status', 'center', '20%');
         $column_aluno = new TDataGridColumn('aluno->nome', 'Aluno', 'left', '25%');
         $column_concedente = new TDataGridColumn('concedente->nome', 'Empresa/Instituição', 'left', '25%');
@@ -129,35 +132,7 @@ class EstagioList extends TPage
        
 
         //Transformação que define a situação do estagio 
-        $column_situacao->setTransformer( function($value, $object, $row) {
-
-            switch ($value) {
-                case 1:
-                    $div = new TElement('span');
-                    $div->class="label label-primary";
-                     $div->style="text-shadow:none; font-size:12px";
-                    $div->add('Em Avaliação');
-                    return $div;
-                    break;
-                case 2:
-                    $div = new TElement('span');
-                    $div->class="label label-success";
-                     $div->style="text-shadow:none; font-size:12px";
-                    $div->add('Estágio Aprovado');
-                    return $div;
-                    break;
-                case 3:
-                    $div = new TElement('span');
-                    $div->class="label label-warning";
-                     $div->style="text-shadow:none; font-size:12px";
-                    $div->add('Estágio com problemas');
-                    return $div;
-                    break;
-            }
-
-                
-           
-        });
+        $column_situacao->setTransformer( array($this, 'ajustarSituacao'));
         
         // creates the datagrid column actions
         $column_id->setAction(new TAction([$this, 'onReload']),   ['order' => 'id']);
@@ -178,11 +153,15 @@ class EstagioList extends TPage
         $action_edit_a   = new TDataGridAction(['AlunoFormWindow', 'onEdit'],   ['id' => '{aluno_id}',  'register_state' => 'false']);
         $action_edit_c   = new TDataGridAction(['ConcedenteFormWindow', 'onEdit'],   ['id' => '{concedente_id}',  'register_state' => 'false']);
         $action_delete = new TDataGridAction([$this, 'onDelete'],   ['key' => '{id}'] );
+        $action_aprovar = new TDataGridAction([$this, 'aprovarTermo'],   ['id' => '{id}'] );
 
         $action_registra_pendencia  = new TDataGridAction(['PendenciaFormList', 'registraPendencia'],   ['estagio_id' => '{id}', 'usuario_id' => '{system_user_id}', 'register_state' => 'false']);
-        $action_registra_documento  = new TDataGridAction(['DocumentoFormList', 'registraDocumento'],   ['estagio_id' => '{id}', 'usuario_id' => '{system_user_id}', 'register_state' => 'false']);
+        $action_registra_documento  = new TDataGridAction(['DocumentoFormList', 'registraDocumento'],   ['estagio_id' => '{id}', 'usuario_id' => '{system_user_id}']);
         $action_edit->setLabel('Editar Termo');
         $action_edit->setImage('far:edit blue fa-fw');
+
+        $action_aprovar->setLabel('Aprovar Termo');
+        $action_aprovar->setImage('fas:thumbs-up blue fa-fw');
         
         $action_delete->setLabel('Deletar Termo');
         $action_delete->setImage('far:trash-alt red fa-fw');
@@ -193,10 +172,10 @@ class EstagioList extends TPage
         $action_edit_c->setLabel('Cadastro Empresa');
         $action_edit_c->setImage('fas:address-card blue fa-fw');
 
-        $action_registra_pendencia->setLabel('Registrar Pendência');
+        $action_registra_pendencia->setLabel('Pendências');
         $action_registra_pendencia->setImage('far:edit blue fa-fw');
 
-        $action_registra_documento->setLabel('Ver documentos');
+        $action_registra_documento->setLabel('Documentos');
         $action_registra_documento->setImage('fa:search blue');
         
         
@@ -212,6 +191,7 @@ class EstagioList extends TPage
         $action_group->addAction($action_registra_documento);
         $action_group->addHeader('>>Avaliação<<');
         $action_group->addAction($action_registra_pendencia);
+        $action_group->addAction($action_aprovar);
         
         // add the actions to the datagrid
         $this->datagrid->addActionGroup($action_group);
@@ -242,13 +222,126 @@ class EstagioList extends TPage
 
     public  function Limpar($param)
     {
+
+       
         $this->form->clear();
-        $this->onSearch();
+        
     }
 
     public function abrir($param){
+
+        TScript::create("Template.closeRightPanel()");
      
     }
 
+   public function ajustarSituacao($value, $object, $row){
+
+    TScript::create("Template.closeRightPanel()");
+
+    $pendencias = Pendencia::where('estagio_id', '=', $object->id)->where('status', '=', 'N')->load();
+
+    if($pendencias){
+        
+     TTransaction::open('estagio');
+     
+
+
+
+    $estagio = Estagio::find($object->id);
+    $estagio->situacao = '3';
+    $estagio->store();
+    $value = $estagio->situacao;
+
+    $div = new TElement('span');
+    $div->class="label label-warning";
+     $div->style="text-shadow:none; font-size:12px";
+    $div->add('Estágio com problemas');
+    return $div;
+    TTransaction::close();
+
+ 
+
+    
+
+     TTransaction::close();
+    }
+    
+    if(!($pendencias) and $object->situacao == '3'){
+        TScript::create("Template.closeRightPanel()");
+     
+
+        TTransaction::open('estagio');
+
+    $estagio = Estagio::find($object->id);
+    $estagio->situacao = '2';
+    $estagio->store();
+    $value = $estagio->situacao;
+
+    $div = new TElement('span');
+    $div->class="label label-success";
+     $div->style="text-shadow:none; font-size:12px";
+    $div->add('Estágio Aprovado');
+    return $div;
+    TTransaction::close();
+
+    }
+       
+    
+    
+
+    TScript::create("Template.closeRightPanel()");
+
+
+    switch ($object->situacao) {
+        case 1:
+            $div = new TElement('span');
+            $div->class="label label-primary";
+             $div->style="text-shadow:none; font-size:12px";
+            $div->add('Em Avaliação');
+            return $div;
+            break;
+        case 2:
+            $div = new TElement('span');
+            $div->class="label label-success";
+             $div->style="text-shadow:none; font-size:12px";
+            $div->add('Estágio Aprovado');
+            return $div;
+            break;
+     
+    }
+   }
+
+   public static function onClosePanel($param)
+   {
+       TScript::create("Template.closeRightPanel()");
+   }
+   
+   
+   
+   public function aprovarTermo($param){
+
+    TTransaction::open('estagio');
+     
+
+
+
+    $estagio = Estagio::find($param['id']);
+    $estagio->situacao = '2';
+    $estagio->store();
+ 
+
+ 
+    TTransaction::close();
+    $action1 = new TAction(array($this, 'onReload'));
+   // $action2 = new TAction(array($this, 'onReload'));
+    // define os parâmetros de cada ação
+   
+    
+    // shows the question dialog
+    new TMessage('info', 'Termo
+    de estágio aprovado', $action1);
+
+
+   }
     
 }

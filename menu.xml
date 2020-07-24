@@ -161,5 +161,6 @@
   </menuitem>
   <menuitem label="Teste">
     <action>Teste</action>
+    <icon>fas:thumbs-up fa-fw</icon>
   </menuitem>
 </menu>

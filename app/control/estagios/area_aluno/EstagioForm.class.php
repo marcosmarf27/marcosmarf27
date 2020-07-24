@@ -40,7 +40,7 @@ class EstagioForm extends TPage
      
         $this->form = new BootstrapFormBuilder('form_estagio');
         $this->form->setFormTitle('Cadastro de Estágios');
-        $this->form->setClientValidation(true);
+       // $this->form->setClientValidation(true);
         
         $code        = new TEntry('id');
         $aluno_id    = new TDBUniqueSearch('aluno_id', 'estagio', 'Aluno', 'id', 'nome');
@@ -261,9 +261,13 @@ class EstagioForm extends TPage
       
       
         
+        $aluno_id->addValidation( 'Aluno', new TRequiredValidator );
+        $professor_id->addValidation( 'Professor', new TRequiredValidator );
+        $concedente_id->addValidation( 'Empresa', new TRequiredValidator);
+        $tipo_doc->addValidation( 'Tipo de Documento', new TRequiredListValidator);
         
         
-        $this->form->addAction( 'Salvar Termo', new TAction([$this, 'onSave']), 'fa:save green' );
+        $this->form->addAction( 'Salvar Termo', new TAction([$this, 'onSave'], [ 'static' => '1']), 'fa:save green' );
         $this->form->addActionLink( 'Novo', new TAction([$this, 'onClear']), 'fa:eraser red' );
         
         
@@ -280,11 +284,15 @@ class EstagioForm extends TPage
         try
         {
 
+        
+
             TTransaction::open('estagio');
            
             TSession::getValue('userid');
 
             $dados = $this->form->getData();
+
+            $this->form->validate();
             $dados->system_user_id=  TSession::getValue('userid');
             $dados->situacao = '1';
             $dados->valor_bolsa = self::tofloat($dados->valor_bolsa);

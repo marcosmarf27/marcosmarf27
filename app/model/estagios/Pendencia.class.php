@@ -19,6 +19,7 @@ class Pendencia extends TRecord
         parent::addAttribute('descricao');
         parent::addAttribute('parecer');
         parent::addAttribute('estagio_id');
+        parent::addAttribute('status');
         parent::addAttribute('system_user_id');
 
     }

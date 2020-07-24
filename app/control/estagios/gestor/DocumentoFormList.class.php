@@ -28,6 +28,7 @@ class DocumentoFormList extends TPage
     
     // trait with onSave, onEdit, onDelete, onReload, onSearch...
     use Adianti\Base\AdiantiStandardFormListTrait;
+    use Adianti\Base\AdiantiFileSaveTrait;
     
     /**
      * Class constructor
@@ -36,6 +37,7 @@ class DocumentoFormList extends TPage
     public function __construct($param)
     {
         parent::__construct();
+        parent::setTargetContainer('adianti_right_panel');
 
         if(isset($param['estagio_id']) and isset($param['usuario_id'])){
         TSession::setValue('estagio_documento', $param['estagio_id']);
@@ -64,6 +66,8 @@ class DocumentoFormList extends TPage
         $data_envio = new TDate('data_envio');
         $tipo_doc = new TCombo('tipo_doc');
         $url = new TFile('url');
+        $url->setAllowedExtensions( ['pdf'] );
+        $url->enableFileHandling();
 
         $tipo_doc->addItems( ['1' => 'Termo de Estágio Obrigatório',
                                   '2' => 'Termo de Estágio Não Obrigatório',
@@ -89,8 +93,9 @@ class DocumentoFormList extends TPage
         
         // define the form actions
         $this->form->addAction( 'Salvar Documento', new TAction([$this, 'onSave']), 'fa:save green');
-        $this->form->addActionLink( 'Entregar novo documento',new TAction([$this, 'onClear']), 'fa:eraser red');
-        $this->form->addActionLink( 'Voltar', new TAction(['EstagioList', 'Limpar']), 'fa:arrow-left');
+       // $this->form->addActionLink( 'Entregar novo documento',new TAction([$this, 'onClear']), 'fa:eraser red');
+       // $this->form->addActionLink( 'Voltar', new TAction(['EstagioList', 'Limpar']), 'fa:arrow-left');
+        $this->form->addHeaderActionLink( _t('Close'), new TAction([$this, 'onClose']), 'fa:times red');
         
         // make id not editable
         $id->setEditable(FALSE);
@@ -101,19 +106,19 @@ class DocumentoFormList extends TPage
         $this->datagrid->width = '100%';
         
         // add the columns
-        $col_id    = new TDataGridColumn('id', 'Id', 'right', '10%');
+      //  $col_id    = new TDataGridColumn('id', 'Id', 'right', '10%');
         $col_tipo = new TDataGridColumn('tipo_doc', 'Tipo Documento', 'left', '20%');
-        $col_url  = new TDataGridColumn('url', 'Descrição ', 'Arquivo', '60%');
+        $col_url  = new TDataGridColumn('url', 'Descrição ', 'Arquivo', '30%');
         $col_data_envio = new TDataGridColumn('data_envio', 'Data de registro', 'left', '20%');
         
         
-        $this->datagrid->addColumn($col_id);
+     //   $this->datagrid->addColumn($col_id);
         $this->datagrid->addColumn($col_tipo);
         $this->datagrid->addColumn($col_url);
         $this->datagrid->addColumn($col_data_envio);
         
         
-        $col_id->setAction( new TAction([$this, 'onReload']),   ['order' => 'id']);
+       // $col_id->setAction( new TAction([$this, 'onReload']),   ['order' => 'id']);
         $col_data_envio->setAction( new TAction([$this, 'onReload']), ['order' => 'data_envio']);
 
         $col_tipo->setTransformer( function($value, $object, $row) {
@@ -212,6 +217,54 @@ class DocumentoFormList extends TPage
             $object->style = "width: 100%; height:calc(100% - 10px)";
             $window->add($object);
             $window->show();
+    }
+    public static function onClose($param)
+    {
+        TScript::create("Template.closeRightPanel()");
+    }
+
+    public function onSave()
+    {
+        try
+        {
+            TTransaction::open('estagio');
+            
+            // form validations
+          //  $this->form->validate();
+            
+            // get form data
+            $data   = $this->form->getData();
+            
+            // store product
+            $object = new Documento();
+            $object->fromArray( (array) $data);
+            $object->store();
+            
+            // copy file to target folder
+            $this->saveFile($object, $data, 'url', 'files/estagios');
+            
+           // $this->saveFiles($object, $data, 'images', 'files/images', 'ProductImage', 'image', 'product_id');
+            
+            // send id back to the form
+            $data->id = $object->id;
+            $this->form->setData($data);
+            
+            TTransaction::close();
+            $action1 = new TAction(array($this, 'onReload'));
+   // $action2 = new TAction(array($this, 'onReload'));
+    // define os parâmetros de cada ação
+   
+    
+    // shows the question dialog
+    new TMessage('info', 'Documento entregue com sucesso!
+    de estágio aprovado', $action1);
+        }
+        catch (Exception $e)
+        {
+            $this->form->setData($this->form->getData());
+            new TMessage('error', $e->getMessage());
+            TTransaction::rollback();
+        }
     }
 
     

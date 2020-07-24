@@ -19,6 +19,7 @@ class Documento extends TRecord
         parent::addAttribute('url');
         parent::addAttribute('estagio_id');
         parent::addAttribute('data_envio');
+        parent::addAttribute('system_user_id');
        
 
     }
