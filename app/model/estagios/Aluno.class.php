@@ -22,6 +22,7 @@ class Aluno extends TRecord
         parent::addAttribute('cidade_id');
         parent::addAttribute('endereco');
         parent::addAttribute('system_user_id');
+        parent::addAttribute('status');
 
     }
 

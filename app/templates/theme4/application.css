@@ -882,6 +882,7 @@ input[type="radio"]:checked + label:after, [type="radio"].with-gap:checked + lab
 .tfield_disabled, .panel form[type="bootstrap"] input.tfield_disabled
 {
     background: #eee;
+  
 }
 
 [data-toggle="buttons"]>.btn input[type="radio"], [data-toggle="buttons"]>.btn-group>.btn input[type="radio"], [data-toggle="buttons"]>.btn input[type="checkbox"], [data-toggle="buttons"]>.btn-group>.btn input[type="checkbox"]

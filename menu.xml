@@ -1,8 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <menu>
-  <menuitem label="Cadastrar Termo de Estágio">
-    <action>EstagioForm#method=onClear</action>
-    <icon>fas:folder-plus fa-fw</icon>
+  <menuitem label="Termos de Estágios">
+    <icon>fas:address-card fa-fw</icon>
+    <menu>
+      <menuitem label="Ver meus termos">
+        <action>EstagioListAluno</action>
+        <icon>fas:align-left fa-fw</icon>
+      </menuitem>
+      <menuitem label="Solicitar Avaliação de Estágio">
+        <action>EstagioForm#method=onClear</action>
+        <icon>fas:folder-plus fa-fw</icon>
+      </menuitem>
+      <menuitem label="Completar meu cadastro">
+        <action>AlunoForm</action>
+        <icon>fas:address-book fa-fw</icon>
+      </menuitem>
+    </menu>
   </menuitem>
   <menuitem label="Gestor de Termos de Estágios">
     <action>EstagioList</action>

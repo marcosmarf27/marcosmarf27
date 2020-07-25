@@ -64,6 +64,7 @@ class DocumentoFormList extends TPage
         $estagio_id    = new TEntry('estagio_id');
         $system_user_id     = new TEntry('system_user_id');
         $data_envio = new TDate('data_envio');
+        $data_envio->setEditable(FALSE);
         $tipo_doc = new TCombo('tipo_doc');
         $url = new TFile('url');
         $url->setAllowedExtensions( ['pdf'] );

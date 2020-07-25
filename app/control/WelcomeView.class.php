@@ -1,4 +1,7 @@
 <?php
+
+use Adianti\Registry\TSession;
+
 /**
  * WelcomeView
  *
@@ -18,26 +21,50 @@ class WelcomeView extends TPage
     {
         parent::__construct();
         
-        $html1 = new THtmlRenderer('app/resources/system_welcome_en.html');
-        $html2 = new THtmlRenderer('app/resources/system_welcome_pt.html');
-        $html3 = new THtmlRenderer('app/resources/system_welcome_es.html');
+        $html1 = new THtmlRenderer('app/resources/system_welcome_pt.html');
+        //$html2 = new THtmlRenderer('app/resources/system_welcome_pt.html');
+       // $html3 = new THtmlRenderer('app/resources/system_welcome_es.html');
 
         // replace the main section variables
         $html1->enableSection('main', array());
-        $html2->enableSection('main', array());
-        $html3->enableSection('main', array());
+        //$html2->enableSection('main', array());
+        //$html3->enableSection('main', array());
         
-        $panel1 = new TPanelGroup('Welcome!');
+        $panel1 = new TPanelGroup('BEM-VINDO AO NOVO SISTEMA DE ESTÁGIOS!');
         $panel1->add($html1);
         
-        $panel2 = new TPanelGroup('Bem-vindo!');
-        $panel2->add($html2);
+       // $panel2 = new TPanelGroup('Bem-vindo!');
+        //$panel2->add($html2);
 		
-        $panel3 = new TPanelGroup('Bienvenido!');
-        $panel3->add($html3);
+       // $panel3 = new TPanelGroup('Bienvenido!');
+       // $panel3->add($html3);
         
-        $vbox = TVBox::pack($panel1, $panel2, $panel3);
+        $vbox = TVBox::pack($panel1);
         $vbox->style = 'display:block; width: 100%';
+
+        TTransaction::open('estagio');
+    
+
+    $aluno = Aluno::where('system_user_id', '=', TSession::getValue('userid'))
+                                 ->where('status', '=', 'S')
+                                 ->load();
+                                // var_dump($aluno);
+
+                                 if (!($aluno)){
+                                    $action1 = new TAction(array('AlunoForm', 'abrir'));
+      
+
+     
+        
+                                    // shows the question dialog
+                                    new TQuestion('Seu CADASTRO DE ALUNO ESTÁ INCOMPLETO! Gostaria de completar seu cadastro?', $action1);
+                                 }
+    TTransaction::close();
+
+        
+    
+    
+
         
         // add the template to the page
         parent::add( $vbox );

@@ -7,6 +7,7 @@ use Adianti\Widget\Dialog\TMessage;
 use Adianti\Widget\Form\TDate;
 use Adianti\Widget\Form\TEntry;
 use Adianti\Widget\Form\TFile;
+use Adianti\Widget\Form\THidden;
 use Adianti\Widget\Form\TText;
 
 /**
@@ -223,12 +224,15 @@ class EstagioForm extends TPage
                                   '7' => 'Histórico Acadêmico' ]);
        // $obs = new TEntry('obs[]');
         $url = new TFile('url[]');
-        $url->setDisplayMode('file');
+       // $url->setDisplayMode('file');
        // $url->enableFileHandling();
-        $data_envio = new TDate('data_envio[]');
-        $data_envio->setMask('dd/mm/yyyy');
-        $data_envio->setDatabaseMask('yyyy-mm-dd');
+        $data_envio = new TEntry('data_envio[]');
+        $system_user_id = new THidden('system_user_id[]');
+        
         $data_envio->setEditable(FALSE);
+      //  $data_envio->setMask('dd/mm/yyyy');
+       // $data_envio->setDatabaseMask('yyyy-mm-dd');
+     
         $change_action = new TAction(array($this, 'onChangeAction_file'));
         $tipo_doc->setChangeAction($change_action);
 
@@ -236,14 +240,13 @@ class EstagioForm extends TPage
      
       
        
-       
        $url->setAllowedExtensions(['pdf']);
        
         $tipo_doc->setSize('100%');
        // $obs->setSize('100%');
         $url->setSize('100%');
         $data_envio->setSize('100%');
-        $url->setHeight('100%');
+        //$url->setHeight('100%');
       
 
 
@@ -436,6 +439,7 @@ class EstagioForm extends TPage
                        
                  
                         $documento->data_envio = $dados->data_envio[$row];
+                        $documento->system_user_id = TSession::getValue('userid');
                         $documento->estagio_id = $estagio->id;
                 
                    
@@ -589,7 +593,9 @@ class EstagioForm extends TPage
     {
         $this->form->clear();
 
-        $dados = $this->form->getData();
+      
+
+        $dados = new stdClass;
         $dados->mes = date('m');
         $dados->ano = date('Y');
 
@@ -827,7 +833,7 @@ exit;
     public static function onChangeAction_file($param){
       
 
-     
+    
 
         $input_id = $param['_field_id'];
        
@@ -835,12 +841,16 @@ exit;
         $unique_id = end($input_pieces);
 
         $data = new stdClass;
-        $data->{'data_envio_'.$unique_id} = date('d/m/Y');;
+         $campo = 'data_envio_'.$unique_id;
+        $data->{'data_envio_'.$unique_id} = date('d/m/Y');
+        
 
           
       
         
         TForm::sendData('form_estagio', $data); 
+
+        //TDate::disableField('form_estagio', $campo);
     }
 
     public static  function tofloat($num) {
