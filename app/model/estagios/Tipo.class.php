@@ -16,4 +16,6 @@ class Tipo extends TRecord
    
 
     }
+
+    
 }

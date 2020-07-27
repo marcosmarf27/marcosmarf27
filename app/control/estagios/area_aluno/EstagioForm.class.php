@@ -91,14 +91,14 @@ class EstagioForm extends TPage
         $data_ini->setMask('dd/mm/yyyy');
         $data_fim->setMask('dd/mm/yyyy');
         $data_ini->setDatabaseMask('yyyy-mm-dd');
-        $data_ini->setDatabaseMask('yyyy-mm-dd');
+        $data_fim->setDatabaseMask('yyyy-mm-dd');
         $valor_bolsa->setNumericMask(2, ',', '.', true);
         $valor_bolsa->placeholder = '0.000,00';
 
         $data_ini_a->setMask('dd/mm/yyyy');
         $data_fim_a->setMask('dd/mm/yyyy');
         $data_ini_a->setDatabaseMask('yyyy-mm-dd');
-        $data_ini_a->setDatabaseMask('yyyy-mm-dd');
+        $data_fim_a->setDatabaseMask('yyyy-mm-dd');
         $valor_transporte->setNumericMask(2, ',', '.', true);
         $valor_transporte->style = "text-align: left";
 
@@ -508,7 +508,7 @@ class EstagioForm extends TPage
              echo "</pre>";
                 // load the horarios (composition)
                  */
-                
+            /*     
                 if ($horarios)
                 {
 
@@ -567,7 +567,21 @@ class EstagioForm extends TPage
                 else
                 {
                     $this->onClear($param);
-                }
+                } */
+
+                $this->horarios->addHeader();
+                $this->horarios->addDetail( new stdClass );
+              
+                $this->horarios->addCloneAction();
+        
+        
+                 
+                $this->documentos->addHeader();
+                $dados = new stdClass;
+               // $dados->tipo_doc = '3';
+                $this->documentos->addDetail( $dados );
+              
+          
              
                 $this->form->setData($estagio);
                 

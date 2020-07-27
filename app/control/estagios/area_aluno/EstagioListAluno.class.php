@@ -1,5 +1,6 @@
 <?php
 
+use Adianti\Core\AdiantiCoreApplication;
 use Adianti\Database\TTransaction;
 use Adianti\Registry\TSession;
 use Adianti\Widget\Dialog\TMessage;
@@ -45,23 +46,27 @@ class EstagioListAluno extends TPage
         // creates a DataGrid
         $this->datagrid = new BootstrapDatagridWrapper(new TDataGrid);
         $this->datagrid->width = '100%';
+        $this->datagrid->enablePopover('Detalhes', '<b>Estágio:</b> {tipo_estagio->nome} <br> <b>Nome:</b> {aluno->nome} <br> <b>Curso:</b> {aluno->curso->nome} <br> <b>Ano:</b> {ano} - <b>Mês:</b> {mes}');
        // $this->datagrid->height = '500px';
      
         
         // creates the datagrid columns
-        $column_id       = new TDataGridColumn('id', 'nº Estágio', 'center', '5%');
-        $column_situacao    = new TDataGridColumn('situacao', 'Status', 'center', '20%');
-        $column_aluno = new TDataGridColumn('aluno->nome', 'Aluno', 'left', '25%');
-        $column_concedente = new TDataGridColumn('concedente->nome', 'Empresa/Instituição', 'left', '25%');
+      //  $column_id       = new TDataGridColumn('id', 'nº Estágio', 'center', '5%');
+        $column_situacao    = new TDataGridColumn('situacao', 'Status', 'center', '15%');
+        $column_aluno = new TDataGridColumn('aluno->nome', 'Aluno', 'left', '20%');
+        $column_tipo = new TDataGridColumn('tipo_estagio->nome', 'TCE tipo', 'left', '20%');
+        $column_concedente = new TDataGridColumn('concedente->nome', 'Concedente', 'left', '20%');
         $column_data_ini     = new TDataGridColumn('data_ini', 'Data Inicio', 'center', '15%');
         $column_data_fim    = new TDataGridColumn('data_fim', 'Data Término', 'center', '15%');
+        $column_tipo->setDataProperty('style','font-weight: bold');
        
        
         
         // add the columns to the DataGrid
-        $this->datagrid->addColumn($column_id);
+       // $this->datagrid->addColumn($column_id);
         $this->datagrid->addColumn($column_situacao);
         $this->datagrid->addColumn($column_aluno);
+        $this->datagrid->addColumn($column_tipo);
         $this->datagrid->addColumn($column_concedente);
         $this->datagrid->addColumn($column_data_ini);
         $this->datagrid->addColumn($column_data_fim);
@@ -71,7 +76,7 @@ class EstagioListAluno extends TPage
         $column_situacao->setTransformer( array($this, 'ajustarSituacao'));
         
         // creates the datagrid column actions
-        $column_id->setAction(new TAction([$this, 'onReload']),   ['order' => 'id']);
+      //  $column_id->setAction(new TAction([$this, 'onReload']),   ['order' => 'id']);
         $column_data_ini->setAction(new TAction([$this, 'onReload']), ['order' => 'data_ini']);
         
         // define the transformer method over date
@@ -85,10 +90,22 @@ class EstagioListAluno extends TPage
         });
 
   
-      //  $action_delete = new TDataGridAction([$this, 'onDelete'],   ['key' => '{id}'] );
+        $action_aditivo = new TDataGridAction([$this, 'gerarAditivo'],   ['key' => '{id}', 'estagio'=> '{id}', 'register_state' => 'false'] );
+        $action_relatorio = new TDataGridAction([$this, 'gerarRelatorio'],   ['key' => '{id}', 'estagio_id' => '{id}', 'usuario_id' => '{system_user_id}'] );
+        $action_rescisao = new TDataGridAction([$this, 'gerarRescisao'],   ['key' => '{id}'] );
+        $action_edit = new TDataGridAction(['EstagioForm', 'onEdit'],   ['key' => '{id}', 'estagio_edit' => '{estagio_ref}', 'register_state' => 'false'] );
+        
+        
+        $action_edit->setDisplayCondition([$this, 'displayAcao']);
+        $action_relatorio->setDisplayCondition([$this, 'displayAcaoR']);
+        $action_aditivo->setDisplayCondition([$this, 'displayAcaoA']);
+        $action_rescisao->setDisplayCondition([$this, 'displayAcaoRE']);
       
 
-       // $this->datagrid->addAction($action_delete, 'Deletar Termo', 'far:trash-alt red fa-fw');
+        $this->datagrid->addAction($action_aditivo, '<b>Termo de Aditivo</b> - Registrar Aditivo', 'far:clone green');
+        $this->datagrid->addAction($action_relatorio, '<b>Relatório</b> - Entregar relatório', 'fas:book fa-fw');
+       $this->datagrid->addAction($action_rescisao, '<b>Rescisão</b> - Registrar Rescisão', 'fa:power-off orange'); 
+       $this->datagrid->addAction($action_edit, '<b>Editar</b> - Informe as novos dados', 'far:edit blue fa-fw');
 
 
         $this->datagrid->createModel();
@@ -105,6 +122,112 @@ class EstagioListAluno extends TPage
         $container->add($panel = TPanelGroup::pack('', $this->datagrid, $this->pageNavigation));
         $panel->getBody()->style = 'overflow-x:auto';
         parent::add($container);
+    }
+
+    public function gerarAditivo($param){
+
+
+        $action1 = new TAction(array($this, 'gerarAditivoEfetivo'));
+       // $action2 = new TAction(array($this, 'onAction2'));
+        // define os parâmetros de cada ação
+        $action1->setParameter('estagio', $param['estagio']);
+//$action2->setParameter('parameter', 2);
+        
+        // shows the question dialog
+        new TQuestion('Gostaria de registrar um aditivo para esse termo ?', $action1);
+
+       
+
+
+        
+       
+       // AdiantiCoreApplication::loadPage('AlunoForm', 'Editar', $param);
+       // TScript::create("__adianti_load_page('engine.php?class=AlunoForm&method=Editar');");
+
+        
+
+    }
+
+    public function gerarRelatorio($param){
+
+
+        
+        $action1 = new TAction(array('DocumentoFormListAluno', 'registraDocumento'));
+       // $action2 = new TAction(array($this, 'onAction2'));
+        // define os parâmetros de cada ação
+        $action1->setParameter('estagio_id', $param['estagio_id']);
+        $action1->setParameter('usuario_id', $param['usuario_id']);
+//$action2->setParameter('parameter', 2);
+        
+        // shows the question dialog
+        new TQuestion('Gostaria de entregar o relatório para esse termo de estágio ?', $action1);
+
+
+    }
+
+        public function displayAcao( $object )
+    {
+        if ($object->tipo_estagio_id == '3')
+        {
+            return TRUE;
+        }
+        return FALSE;
+    }
+    public function displayAcaoR( $object )
+    {
+        if ($object->tipo_estagio_id == '1' or $object->tipo_estagio_id == '2')
+        {
+            return TRUE;
+        }
+        return FALSE;
+    }
+
+    public function displayAcaoA( $object )
+    {
+        if ($object->tipo_estagio_id == '1' or $object->tipo_estagio_id == '2')
+        {
+            return TRUE;
+        }
+        return FALSE;
+    }
+    public function displayAcaoRE( $object )
+    {
+        if ($object->tipo_estagio_id == '1' or $object->tipo_estagio_id == '2')
+        {
+            return TRUE;
+        }
+        return FALSE;
+    }
+    
+
+    public function gerarRescisao($param){
+
+    }
+
+    public function gerarAditivoEfetivo($param){
+
+        TTransaction::open('estagio');
+
+        $estagio = Estagio::find($param['estagio']);
+        $estagio->estagio_ref = $estagio->id;
+        $estagio->situacao = '1';
+        $estagio->tipo_estagio_id  = '3';
+
+        unset($estagio->id);
+        $estagio->store();
+        TTransaction::close();
+        new TMessage('info', 'Agora bastar <b>EDITAR</b> o termo de aditivo com as novas informações.');
+        AdiantiCoreApplication::loadPage('EstagioListAluno', 'onReload', $param);
+        
+
+    }
+
+    public function gerarRelatorioEfetivo($param){
+
+    }
+
+    public function gerarRescisaoEfetivo($param){
+
     }
 
     public  function Limpar($param)
@@ -176,7 +299,7 @@ class EstagioListAluno extends TPage
     
     
 
-    TScript::create("Template.closeRightPanel()");
+    
 
 
     switch ($object->situacao) {
@@ -194,15 +317,12 @@ class EstagioListAluno extends TPage
             $div->add('Estágio Aprovado');
             return $div;
             break;
+            
      
     }
    }
 
-   public static function onClosePanel($param)
-   {
-       TScript::create("Template.closeRightPanel()");
-   }
-   
+ 
    
    
    public function aprovarTermo($param){

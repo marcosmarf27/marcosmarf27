@@ -10,6 +10,7 @@ class Aluno extends TRecord
     const IDPOLICY =  'max'; // {max, serial}
 
     private $cidade;
+    private $curso;
     
     public function __construct($id = NULL)
     {
@@ -36,5 +37,16 @@ class Aluno extends TRecord
         
         // returns the City Active Record
         return $this->cidade;
+    }
+    function get_curso()
+    {
+        // instantiates City, load $this->city_id
+        if (empty($this->cidade))
+        {
+            $this->curso = new Curso($this->curso_id);
+        }
+        
+        // returns the City Active Record
+        return $this->curso;
     }
 }

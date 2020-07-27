@@ -36,6 +36,7 @@ class Estagio extends TRecord
         parent::addAttribute('system_user_id');
         parent::addAttribute('ano');
         parent::addAttribute('mes');
+        parent::addAttribute('estagio_ref');
       
 
         
@@ -52,6 +53,17 @@ class Estagio extends TRecord
         
         // returns the City Active Record
         return $this->aluno;
+    }
+    function get_aluno_curso()
+    {
+        // instantiates City, load $this->city_id
+        if (empty($this->aluno))
+        {
+            $this->aluno = new Aluno($this->aluno_id);
+        }
+        
+        // returns the City Active Record
+        return $this->aluno->curso;
     }
     function get_professor()
     {
