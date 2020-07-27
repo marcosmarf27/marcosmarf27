@@ -29,7 +29,7 @@ class EstagioForm extends TPage
      * Class constructor
      * Creates the page and the registration form
      */
-    function __construct()
+    function __construct($param)
     {
         parent::__construct();
        // parent::setSize(0.8, null);
@@ -44,7 +44,11 @@ class EstagioForm extends TPage
        // $this->form->setClientValidation(true);
         
         $code        = new TEntry('id');
-        $aluno_id    = new TDBUniqueSearch('aluno_id', 'estagio', 'Aluno', 'id', 'nome');
+
+        $filter = new TCriteria;
+        $userid = TSession::getValue('userid');
+        $filter->add(new TFilter('system_user_id', '=', $userid));
+        $aluno_id    = new TDBUniqueSearch('aluno_id', 'estagio', 'Aluno', 'id', 'nome', 'nome',  $filter);
         $concedente_id    = new TDBUniqueSearch('concedente_id', 'estagio', 'Concedente', 'id', 'nome');
         $professor_id    = new TDBUniqueSearch('professor_id', 'estagio', 'Professor', 'id', 'nome');
         $tipo_estagio_id = new TDBCombo('tipo_estagio_id', 'estagio', 'Tipo', 'id', 'nome');
@@ -299,7 +303,6 @@ class EstagioForm extends TPage
         
         $this->form->addAction( 'Salvar Termo', new TAction([$this, 'onSave'], [ 'static' => '1']), 'fa:save green' );
         $this->form->addActionLink( 'Novo', new TAction([$this, 'onClear']), 'fa:eraser red' );
-        
         
         // add the form inside the page
         parent::add($this->form);
@@ -593,13 +596,56 @@ class EstagioForm extends TPage
     {
         $this->form->clear();
 
-      
+        TTransaction::open('estagio');
+    
 
+        $aluno = Aluno::where('system_user_id', '=', TSession::getValue('userid'))
+                                     ->where('status', '=', 'S')
+                                     ->load();
+                                    // var_dump($aluno);
+    
+                                     if (!($aluno)){
+                                        $action1 = new TAction(array('AlunoForm', 'abrir'));
+          
+    
+         
+            
+                                        // shows the question dialog
+                                        new TQuestion('Seu CADASTRO DE ALUNO ESTÁ INCOMPLETO! Gostaria de completar seu cadastro?', $action1);
+                                        exit;
+                                     }
+        TTransaction::close();
+    
+
+        TTransaction::open('estagio');
+        $aluno_cadastrado = Aluno::where('system_user_id', '=', TSession::getValue('userid'))->load();
+
+        if($aluno_cadastrado){
+
+            
+
+            $dados = new stdClass;
+            $dados->aluno_id = $aluno_cadastrado[0]->id;
+            $dados->mes = date('m');
+            $dados->ano = date('Y');
+            //var_dump($dados);
+
+            $this->form->setData($dados);
+        }else{
+
+            
         $dados = new stdClass;
         $dados->mes = date('m');
         $dados->ano = date('Y');
 
         $this->form->setData($dados);
+        }
+
+        TTransaction::close();
+
+      
+
+   
       
       
 

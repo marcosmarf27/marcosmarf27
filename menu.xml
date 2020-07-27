@@ -12,7 +12,7 @@
         <icon>fas:folder-plus fa-fw</icon>
       </menuitem>
       <menuitem label="Completar meu cadastro">
-        <action>AlunoForm</action>
+        <action>AlunoForm#method=Editar</action>
         <icon>fas:address-book fa-fw</icon>
       </menuitem>
     </menu>

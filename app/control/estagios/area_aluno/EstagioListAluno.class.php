@@ -85,10 +85,10 @@ class EstagioListAluno extends TPage
         });
 
   
-        $action_delete = new TDataGridAction([$this, 'onDelete'],   ['key' => '{id}'] );
+      //  $action_delete = new TDataGridAction([$this, 'onDelete'],   ['key' => '{id}'] );
       
 
-        $this->datagrid->addAction($action_delete, 'Deletar Termo', 'far:trash-alt red fa-fw');
+       // $this->datagrid->addAction($action_delete, 'Deletar Termo', 'far:trash-alt red fa-fw');
 
 
         $this->datagrid->createModel();

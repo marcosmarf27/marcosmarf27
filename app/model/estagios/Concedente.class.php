@@ -23,6 +23,12 @@ class Concedente extends TRecord
         parent::addAttribute('representante');
         parent::addAttribute('endereco');
 
+        parent::addAttribute('situacao');
+        parent::addAttribute('n_convenio');
+        parent::addAttribute('validade_ini');
+        parent::addAttribute('validade_fim');
+        parent::addAttribute('tipo');
+
     }
 
     function get_cidade()
