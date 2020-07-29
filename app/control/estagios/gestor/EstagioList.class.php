@@ -95,6 +95,7 @@ class EstagioList extends TPage
         $this->form->addAction('Procurar', new TAction([$this, 'onSearch']), 'fa:search');
         $this->form->addActionLink('Cadastrar novo termo',  new TAction(['EstagioFormAdmin', 'onClear']), 'fa:plus green');
         $this->form->addActionLink( 'Limpar', new TAction([$this, 'Limpar']), 'fa:eraser red' );
+        $this->form->addActionLink( 'Atualizar termos', new TAction([$this, 'carregar']), 'fas:play fa-fw' );
         
         // creates a DataGrid
         $this->datagrid = new BootstrapDatagridWrapper(new TDataGrid);
@@ -125,8 +126,9 @@ class EstagioList extends TPage
         // add the columns to the DataGrid
         $this->datagrid->addColumn($column_id);
         $this->datagrid->addColumn($column_situacao);
-        $this->datagrid->addColumn($column_aluno);
         $this->datagrid->addColumn($column_concedente);
+        $this->datagrid->addColumn($column_aluno);
+     
         $this->datagrid->addColumn($column_data_ini);
         $this->datagrid->addColumn($column_data_fim);
        
@@ -236,8 +238,6 @@ class EstagioList extends TPage
 
    public function ajustarSituacao($value, $object, $row){
 
-    TScript::create("Template.closeRightPanel()");
-
     $pendencias = Pendencia::where('estagio_id', '=', $object->id)->where('status', '=', 'N')->load();
 
     if($pendencias){
@@ -248,48 +248,40 @@ class EstagioList extends TPage
 
 
     $estagio = Estagio::find($object->id);
-    $estagio->situacao = '3';
+    $estagio->situacao = '4';
     $estagio->store();
-    $value = $estagio->situacao;
+   
 
-    $div = new TElement('span');
-    $div->class="label label-warning";
-     $div->style="text-shadow:none; font-size:12px";
-    $div->add('Estágio com problemas');
-    return $div;
+    
     TTransaction::close();
 
- 
+   
 
-    
+ }
+ if (!($pendencias) and $object->situacao == '4'){
 
-     TTransaction::close();
-    }
-    
-    if(!($pendencias) and $object->situacao == '3'){
-        TScript::create("Template.closeRightPanel()");
+       
+    TTransaction::open('estagio');
      
 
-        TTransaction::open('estagio');
+
 
     $estagio = Estagio::find($object->id);
     $estagio->situacao = '2';
     $estagio->store();
-    $value = $estagio->situacao;
+   
 
-    $div = new TElement('span');
-    $div->class="label label-success";
-     $div->style="text-shadow:none; font-size:12px";
-    $div->add('Estágio Aprovado');
-    return $div;
+    
     TTransaction::close();
 
-    }
-       
+ }
+
+
     
+   
     
 
-    TScript::create("Template.closeRightPanel()");
+    
 
 
     switch ($object->situacao) {
@@ -307,13 +299,50 @@ class EstagioList extends TPage
             $div->add('Estágio Aprovado');
             return $div;
             break;
+
+            case 3:
+                $div = new TElement('span');
+                $div->class="label label-danger";
+                 $div->style="text-shadow:none; font-size:12px";
+                $div->add('Rescindido');
+                return $div;
+                break;
+
+                case 4:
+                    $div = new TElement('span');
+                    $div->class="label label-warning";
+                     $div->style="text-shadow:none; font-size:12px";
+                    $div->add('Estágio com problemas');
+                    return $div;
+                    break;
+
+                    case 5:
+                        $div = new TElement('span');
+                        $div->class="label label-danger";
+                         $div->style="text-shadow:none; font-size:12px";
+                        $div->add('Cancelado');
+                        return $div;
+                        break;
+         
+                
+            
      
     }
+
+    $this->carregar();
+
+   
    }
 
    public static function onClosePanel($param)
    {
        TScript::create("Template.closeRightPanel()");
+   }
+
+   public function carregar(){
+
+    AdiantiCoreApplication::loadPage('EstagioList', 'onReload');
+
    }
    
    

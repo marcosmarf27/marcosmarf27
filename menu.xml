@@ -11,7 +11,7 @@
         <action>EstagioForm#method=onClear</action>
         <icon>fas:folder-plus fa-fw</icon>
       </menuitem>
-      <menuitem label="Completar meu cadastro">
+      <menuitem label="Meu cadastro">
         <action>AlunoForm#method=Editar</action>
         <icon>fas:address-book fa-fw</icon>
       </menuitem>

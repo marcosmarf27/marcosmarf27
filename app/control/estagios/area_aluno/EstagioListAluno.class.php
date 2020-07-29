@@ -52,8 +52,8 @@ class EstagioListAluno extends TPage
         
         // creates the datagrid columns
       //  $column_id       = new TDataGridColumn('id', 'nº Estágio', 'center', '5%');
-        $column_situacao    = new TDataGridColumn('situacao', 'Status', 'center', '15%');
-        $column_aluno = new TDataGridColumn('aluno->nome', 'Aluno', 'left', '20%');
+        $column_situacao    = new TDataGridColumn('situacao', 'Status', 'center', '20%');
+      //  $column_aluno = new TDataGridColumn('aluno->nome', 'Aluno', 'left', '20%');
         $column_tipo = new TDataGridColumn('tipo_estagio->nome', 'TCE tipo', 'left', '20%');
         $column_concedente = new TDataGridColumn('concedente->nome', 'Concedente', 'left', '20%');
         $column_data_ini     = new TDataGridColumn('data_ini', 'Data Inicio', 'center', '15%');
@@ -65,9 +65,10 @@ class EstagioListAluno extends TPage
         // add the columns to the DataGrid
        // $this->datagrid->addColumn($column_id);
         $this->datagrid->addColumn($column_situacao);
-        $this->datagrid->addColumn($column_aluno);
-        $this->datagrid->addColumn($column_tipo);
         $this->datagrid->addColumn($column_concedente);
+       // $this->datagrid->addColumn($column_aluno);
+        $this->datagrid->addColumn($column_tipo);
+       
         $this->datagrid->addColumn($column_data_ini);
         $this->datagrid->addColumn($column_data_fim);
        
@@ -94,18 +95,22 @@ class EstagioListAluno extends TPage
         $action_relatorio = new TDataGridAction([$this, 'gerarRelatorio'],   ['key' => '{id}', 'estagio_id' => '{id}', 'usuario_id' => '{system_user_id}'] );
         $action_rescisao = new TDataGridAction([$this, 'gerarRescisao'],   ['key' => '{id}'] );
         $action_edit = new TDataGridAction(['EstagioForm', 'onEdit'],   ['key' => '{id}', 'estagio_edit' => '{estagio_ref}', 'register_state' => 'false'] );
-        
+        $action_ver = new TDataGridAction(['PendenciaFormListAluno', 'registraPendencia'],   ['key' => '{id}', 'estagio_id' => '{id}',  'usuario_id' => '{system_user_id}', 'register_state' => 'false'] );
+        $action_doc = new TDataGridAction([$this, 'entregarDoc'],   ['key' => '{id}', 'estagio_id' => '{id}', 'usuario_id' => '{system_user_id}'] );
         
         $action_edit->setDisplayCondition([$this, 'displayAcao']);
         $action_relatorio->setDisplayCondition([$this, 'displayAcaoR']);
         $action_aditivo->setDisplayCondition([$this, 'displayAcaoA']);
         $action_rescisao->setDisplayCondition([$this, 'displayAcaoRE']);
+        $action_ver->setDisplayCondition([$this, 'displayAcaoVer']);
       
 
         $this->datagrid->addAction($action_aditivo, '<b>Termo de Aditivo</b> - Registrar Aditivo', 'far:clone green');
         $this->datagrid->addAction($action_relatorio, '<b>Relatório</b> - Entregar relatório', 'fas:book fa-fw');
        $this->datagrid->addAction($action_rescisao, '<b>Rescisão</b> - Registrar Rescisão', 'fa:power-off orange'); 
        $this->datagrid->addAction($action_edit, '<b>Editar</b> - Informe as novos dados', 'far:edit blue fa-fw');
+       $this->datagrid->addAction($action_ver, '<b>Ver</b> - Ver pendências/soluções', 'fas:eye fa-fw');
+       $this->datagrid->addAction($action_doc, '<b>Documentos</b> - Entregar documentos complementares', 'fas:file-upload fa-fw');
 
 
         $this->datagrid->createModel();
@@ -165,6 +170,23 @@ class EstagioListAluno extends TPage
 
     }
 
+    public function entregarDoc($param){
+
+
+        
+        $action1 = new TAction(array('EntregaDocumentoAluno', 'registraDocumento'));
+       // $action2 = new TAction(array($this, 'onAction2'));
+        // define os parâmetros de cada ação
+        $action1->setParameter('estagio_id', $param['estagio_id']);
+        $action1->setParameter('usuario_id', $param['usuario_id']);
+//$action2->setParameter('parameter', 2);
+        
+        // shows the question dialog
+        new TQuestion('Deseja entregar novo documento ?', $action1);
+
+
+    }
+
         public function displayAcao( $object )
     {
         if ($object->tipo_estagio_id == '3')
@@ -198,9 +220,28 @@ class EstagioListAluno extends TPage
         }
         return FALSE;
     }
+
+    public function displayAcaoVer( $object )
+    {
+        if ($object->situacao == '4')
+        {
+            return TRUE;
+        }
+        return FALSE;
+    }
     
 
     public function gerarRescisao($param){
+
+        $action1 = new TAction(array($this, 'gerarRescisaoEfetivo'));
+        // $action2 = new TAction(array($this, 'onAction2'));
+         // define os parâmetros de cada ação
+         $action1->setParameter('key', $param['key']);
+       
+ //$action2->setParameter('parameter', 2);
+         
+         // shows the question dialog
+         new TQuestion("Gostaria realmente de <b>Rescindir</b>  esse estágio?", $action1);
 
     }
 
@@ -228,6 +269,17 @@ class EstagioListAluno extends TPage
 
     public function gerarRescisaoEfetivo($param){
 
+
+        TTransaction::open('estagio');
+        $estagio = new Estagio($param['key']);
+
+        $estagio->situacao = '3';
+        $estagio->data_rescisao = date('d/m/Y');
+        $estagio->store();
+
+        TTransaction::close();
+        AdiantiCoreApplication::loadPage('EstagioListAluno', 'onReload');
+
     }
 
     public  function Limpar($param)
@@ -240,13 +292,13 @@ class EstagioListAluno extends TPage
 
     public function abrir($param){
 
-        TScript::create("Template.closeRightPanel()");
+        
      
     }
 
    public function ajustarSituacao($value, $object, $row){
 
-    TScript::create("Template.closeRightPanel()");
+ 
 
     $pendencias = Pendencia::where('estagio_id', '=', $object->id)->where('status', '=', 'N')->load();
 
@@ -258,45 +310,21 @@ class EstagioListAluno extends TPage
 
 
     $estagio = Estagio::find($object->id);
-    $estagio->situacao = '3';
+    $estagio->situacao = '4';
     $estagio->store();
-    $value = $estagio->situacao;
+   
 
-    $div = new TElement('span');
-    $div->class="label label-warning";
-     $div->style="text-shadow:none; font-size:12px";
-    $div->add('Estágio com problemas');
-    return $div;
+    
     TTransaction::close();
+
+   
+
+ }
 
  
 
     
-
-     TTransaction::close();
-    }
-    
-    if(!($pendencias) and $object->situacao == '3'){
-        TScript::create("Template.closeRightPanel()");
-     
-
-        TTransaction::open('estagio');
-
-    $estagio = Estagio::find($object->id);
-    $estagio->situacao = '2';
-    $estagio->store();
-    $value = $estagio->situacao;
-
-    $div = new TElement('span');
-    $div->class="label label-success";
-     $div->style="text-shadow:none; font-size:12px";
-    $div->add('Estágio Aprovado');
-    return $div;
-    TTransaction::close();
-
-    }
-       
-    
+   
     
 
     
@@ -317,9 +345,44 @@ class EstagioListAluno extends TPage
             $div->add('Estágio Aprovado');
             return $div;
             break;
+
+            case 3:
+                $div = new TElement('span');
+                $div->class="label label-danger";
+                 $div->style="text-shadow:none; font-size:12px";
+                $div->add('Rescindido');
+                return $div;
+                break;
+
+                case 4:
+                    $div = new TElement('span');
+                    $div->class="label label-warning";
+                     $div->style="text-shadow:none; font-size:12px";
+                    $div->add('Estágio com problemas');
+                    return $div;
+                    break;
+
+                    case 5:
+                        $div = new TElement('span');
+                        $div->class="label label-danger";
+                         $div->style="text-shadow:none; font-size:12px";
+                        $div->add('Cancelado');
+                        return $div;
+                        break;
+         
+                
             
      
     }
+    $this->carregar();
+
+
+   }
+
+   public function carregar(){
+
+    AdiantiCoreApplication::loadPage('EstagioListAluno', 'onReload');
+
    }
 
  

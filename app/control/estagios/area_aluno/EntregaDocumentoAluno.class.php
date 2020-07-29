@@ -20,7 +20,7 @@ use Adianti\Widget\Form\TText;
  * @copyright  Copyright (c) 2006 Adianti Solutions Ltd. (http://www.adianti.com.br)
  * @license    http://www.adianti.com.br/framework-license
  */
-class DocumentoFormListAluno extends TPage
+class EntregaDocumentoAluno extends TPage
 {
     protected $form;      // form
     protected $datagrid;  // datagrid
@@ -58,10 +58,10 @@ class DocumentoFormListAluno extends TPage
         
         // create the form
         $this->form = new BootstrapFormBuilder('form_documentos');
-        $this->form->setFormTitle('Documentos do Estágio');
+        $this->form->setFormTitle('Entrega de documentos complementares');
         
         // create the form fields
-        $id     = new TEntry('id');
+        $id     = new THidden('id');
         $estagio_id    = new THidden('estagio_id');
         $system_user_id     = new THidden('system_user_id');
         $data_envio = new TDate('data_envio');
@@ -84,7 +84,7 @@ class DocumentoFormListAluno extends TPage
         
         // add the form fields
        
-        $this->form->addFields([new TLabel('ID')],    [$id] ,  [$system_user_id],  [$estagio_id] );
+        $this->form->addFields(  [$id] ,  [$system_user_id],  [$estagio_id] );
         $this->form->addFields( [new TLabel('Data')],  [$data_envio] );
         $this->form->addFields( [new TLabel('Documento')],  [$tipo_doc] );
         $this->form->addFields( [new TLabel('Arquivo')],    [$url] );
@@ -111,7 +111,7 @@ class DocumentoFormListAluno extends TPage
         $id->setEditable(FALSE);
         $estagio_id->setEditable(FALSE);
         $system_user_id->setEditable(FALSE);
-        $tipo_doc->setEditable(FALSE);
+        //$tipo_doc->setEditable(FALSE);
         // create the datagrid
         $this->datagrid = new BootstrapDatagridWrapper(new TDataGrid);
         $this->datagrid->width = '100%';
@@ -143,16 +143,27 @@ class DocumentoFormListAluno extends TPage
                     return 'TCE não  obrigatório';
                 break;
                 case 3:
-                    return 'TCE Relatório';
+                    return 'TCE Aditivo';
                     break;
 
                 case 4:
                         return 'Termo de Rescisão';
                         break;
 
-                        case 5:
-                            return 'Relatório de Estágio';
-                            break;
+                case 5:
+                 return 'Relatório de Estágio';
+                    break;
+
+                 case 6:
+                 return 'Atestado de Matricula';
+                 break;
+
+                 case 7:
+                    return 'Histórico Acadêmico';
+                    break;
+
+                 
+    
             }
 
                 
@@ -202,7 +213,7 @@ class DocumentoFormListAluno extends TPage
         $dados->estagio_id = TSession::getValue(__CLASS__.'estagio_documento');
         $dados->system_user_id = TSession::getValue(__CLASS__.'usuario_documento');
         $dados->data_envio = date('d/m/Y');
-        $dados->tipo_doc = '5';
+        
 
         $this->form->setData($dados);
 

@@ -49,8 +49,11 @@ class EstagioForm extends TPage
         $userid = TSession::getValue('userid');
         $filter->add(new TFilter('system_user_id', '=', $userid));
         $aluno_id    = new TDBUniqueSearch('aluno_id', 'estagio', 'Aluno', 'id', 'nome', 'nome',  $filter);
+        $aluno_id->setMinLength(1);
         $concedente_id    = new TDBUniqueSearch('concedente_id', 'estagio', 'Concedente', 'id', 'nome');
+        $concedente_id->setMinLength(1);
         $professor_id    = new TDBUniqueSearch('professor_id', 'estagio', 'Professor', 'id', 'nome');
+        $professor_id->setMinLength(1);
         $tipo_estagio_id = new TDBCombo('tipo_estagio_id', 'estagio', 'Tipo', 'id', 'nome');
         $apolice      = new TEntry('apolice');
         $data_ini_a  = new TDate('data_ini_a');
