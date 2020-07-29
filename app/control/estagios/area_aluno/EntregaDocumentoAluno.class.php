@@ -38,6 +38,7 @@ class EntregaDocumentoAluno extends TPage
     public function __construct($param)
     {
         parent::__construct();
+        //parent::setSize(0.9, 0.9);
         parent::setTargetContainer('adianti_right_panel');
 
         if(isset($param['estagio_id']) and isset($param['usuario_id'])){
@@ -178,7 +179,7 @@ class EntregaDocumentoAluno extends TPage
             $action->setParameter('url', $value);
 
         $b2 = new TActionLink('Ver Documento', $action, 'white', 10, '', 'far:check-square #FEFF00');
-        $b2->class='btn btn-success';
+        $b2->class='btn btn-primary';
         return $b2;
         
            
@@ -197,7 +198,7 @@ class EntregaDocumentoAluno extends TPage
         // wrap objects inside a table
         $vbox = new TVBox;
         $vbox->style = 'width: 100%';
-        $vbox->add(new TXMLBreadCrumb('menu.xml', 'EstagioList'));
+     //   $vbox->add(new TXMLBreadCrumb('menu.xml', 'EstagioList'));
         $vbox->add($this->form);
         $vbox->add(TPanelGroup::pack('', $this->datagrid));
         

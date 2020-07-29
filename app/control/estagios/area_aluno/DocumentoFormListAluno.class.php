@@ -58,7 +58,7 @@ class DocumentoFormListAluno extends TPage
         
         // create the form
         $this->form = new BootstrapFormBuilder('form_documentos');
-        $this->form->setFormTitle('Documentos do Estágio');
+        $this->form->setFormTitle('Entrega de documentos (RELATÓRIO)');
         
         // create the form fields
         $id     = new TEntry('id');
@@ -167,7 +167,7 @@ class DocumentoFormListAluno extends TPage
             $action->setParameter('url', $value);
 
         $b2 = new TActionLink('Ver Documento', $action, 'white', 10, '', 'far:check-square #FEFF00');
-        $b2->class='btn btn-success';
+        $b2->class='btn btn-primary';
         return $b2;
         
            
@@ -186,7 +186,7 @@ class DocumentoFormListAluno extends TPage
         // wrap objects inside a table
         $vbox = new TVBox;
         $vbox->style = 'width: 100%';
-        $vbox->add(new TXMLBreadCrumb('menu.xml', 'EstagioList'));
+       // $vbox->add(new TXMLBreadCrumb('menu.xml', 'EstagioList'));
         $vbox->add($this->form);
         $vbox->add(TPanelGroup::pack('', $this->datagrid));
         

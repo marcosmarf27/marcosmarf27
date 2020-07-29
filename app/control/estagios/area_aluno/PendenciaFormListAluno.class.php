@@ -210,7 +210,7 @@ class PendenciaFormListAluno extends TWindow
         // wrap objects inside a table
         $vbox = new TVBox;
         $vbox->style = 'width: 100%';
-        $vbox->add(new TXMLBreadCrumb('menu.xml', 'EstagioList'));
+       // $vbox->add(new TXMLBreadCrumb('menu.xml', 'EstagioList'));
    
         $vbox->add(TPanelGroup::pack('', $this->datagrid));
         $vbox->add($this->form);

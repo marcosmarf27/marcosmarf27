@@ -28,6 +28,7 @@ class ConcedenteFormWindow extends TWindow
     function __construct()
     {
         parent::__construct();
+        parent::setSize(0.9, 0.9);
         
         $this->setDatabase('estagio');    // defines the database
         $this->setActiveRecord('Concedente');   // defines the active record
