@@ -5,8 +5,10 @@ use Adianti\Database\TTransaction;
 use Adianti\Registry\TSession;
 use Adianti\Widget\Form\TCombo;
 use Adianti\Widget\Form\TDate;
+use Adianti\Widget\Form\TForm;
 use Adianti\Widget\Form\THtmlEditor;
 use Adianti\Widget\Form\TText;
+use Adianti\Widget\Wrapper\TDBCombo;
 
 /**
  * StandardFormDataGridView
@@ -67,14 +69,17 @@ class PendenciaFormList extends TWindow
         $estagio_id    = new TEntry('estagio_id');
         $system_user_id     = new TEntry('system_user_id');
         $data_reg = new TDate('data_reg');
-        $tipo_pendencia = new TCombo('tipo_pendencia');
+
+        $tipo_pendencia = new TDBCombo('tipo_pendencia', 'estagio', 'Solucao', 'id', 'nome');
+
+       /*  $tipo_pendencia = new TCombo('tipo_pendencia');
         $tipo_pendencia->addItems([ '1' => 'Ausencia de Assinaturas', 
                                         '2' => 'Empresa não conveniada',
                                         '3' => 'Estágio com rasuras',
                                         '4' => 'Aluno não matriculado',
                                         '5' => 'Datas invalidas',
                                         '6' => 'Ausência de Assinaturas',
-                                        '7' => 'Apolice de seguro inválida']);
+                                        '7' => 'Apolice de seguro inválida']); */
         $descricao = new TText('descricao');
         $descricao->setSize('100%', 40);
         $descricao->placeholder = 'Resuma aqui os problemas encontrados';
@@ -103,6 +108,9 @@ class PendenciaFormList extends TWindow
         // define the form actions
         $this->form->addAction( 'Salvar Registro', new TAction([$this, 'onSave']), 'fa:save green');
         $this->form->addActionLink( 'Novo Registro',new TAction([$this, 'onClear']), 'fa:eraser red');
+
+        $change_action = new TAction(array($this, 'onChangeAction'));
+        $tipo_pendencia->setChangeAction($change_action);
       
         // make id not editable
         $id->setEditable(FALSE);
@@ -127,42 +135,13 @@ class PendenciaFormList extends TWindow
         
         $col_tipo->setTransformer( function($value, $object, $row) {
 
-          switch ($value) {
-              
-               case 1 :
-                return  'Ausencia de Assinaturas';
-              break;
+         
+TTransaction::open('estagio');
+ 
+$solucao = Solucao::find($value);
+return $solucao->nome;
 
-              case 2 :
-                return  'Ausencia de Assinaturas';
-              break;
-
-              case 3 :
-                return 'Empresa não conveniada';
-              break;
-
-              case 4:
-                return 'Estágio com rasuras';
-              break;
-             
-              
-              return 'Aluno não matriculado';
-            break;
-                case 5:
-                   return 'Datas invalidas';
-                break;
-                case 6:
-                   return 'Ausência de Assinaturas';
-                break;
-                case 7:
-                   return 'Apolice de seguro inválida';
-                break;
-                   
-                  
-                 
-             
-          }
-
+TTransaction::close();
               
          
       });
@@ -287,6 +266,48 @@ class PendenciaFormList extends TWindow
 
 
       TTransaction::close();
+    }
+
+    public static function onChangeAction($param){
+
+      TTransaction::open('estagio');
+
+     
+
+    /*   [class] => PendenciaFormList
+    [method] => onChangeAction
+    [register_state] => false
+    [static] => 1
+    [id] => 
+    [system_user_id] => 2
+    [estagio_id] => 2
+    [data_reg] => 
+    [tipo_pendencia] => 1
+    [descricao] => 
+    [status] => N
+    [parecer] => 
+    [_field_value] => 1
+    [_field_id] => tcombo_1444798038
+    [_field_name] => tipo_pendencia
+    [_form_name] => form_pendencias
+    [_field_data] => 
+    [_field_data_json] => {}
+    [key] => 1
+    [ajax_lookup] => 1 */
+
+
+ 
+$solucao = Solucao::find($param['_field_value']);
+
+$dados = new stdClass;
+$dados->descricao = $solucao->solucao;
+$dados->parecer = $solucao->problema;
+TForm::sendData($param['_form_name'], $dados);
+
+
+TTransaction::close();
+
+
     }
 
     

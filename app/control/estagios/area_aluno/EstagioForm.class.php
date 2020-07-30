@@ -233,12 +233,12 @@ class EstagioForm extends TPage
         $url = new TFile('url[]');
        // $url->setDisplayMode('file');
        // $url->enableFileHandling();
-        $data_envio = new TEntry('data_envio[]');
+      // $data_envio = new TEntry('data_envio[]');
         $system_user_id = new THidden('system_user_id[]');
         
-        $data_envio->setEditable(FALSE);
-      //  $data_envio->setMask('dd/mm/yyyy');
-       // $data_envio->setDatabaseMask('yyyy-mm-dd');
+        //$data_envio->setEditable(FALSE);
+       // $data_envio->setMask('yyyy-mm-dd');
+        //$data_envio->setDatabaseMask('yyyy-mm-dd');
      
         $change_action = new TAction(array($this, 'onChangeAction_file'));
         $tipo_doc->setChangeAction($change_action);
@@ -252,7 +252,7 @@ class EstagioForm extends TPage
         $tipo_doc->setSize('100%');
        // $obs->setSize('100%');
         $url->setSize('100%');
-        $data_envio->setSize('100%');
+        //$data_envio->setSize('100%');
         //$url->setHeight('100%');
       
 
@@ -269,13 +269,13 @@ class EstagioForm extends TPage
         $this->documentos->addField( '<b>Tipo de Documento</b>', $tipo_doc, ['width' => '20%']);
       //  $this->documentos->addField( '<b>Observação</b>', $obs,  ['width' => '30%'] );
         $this->documentos->addField( '<b>Documento</b>', $url,  ['width' => '60%'] );
-        $this->documentos->addField( '<b>Data de envio</b>', $data_envio,  ['width' => '15%'] );
+      //  $this->documentos->addField( '<b>Data de envio</b>', $data_envio,  ['width' => '15%'] );
 
         
         $this->form->addField($tipo_doc);
       //  $this->form->addField($obs);
         $this->form->addField($url);
-        $this->form->addField($data_envio);
+       // $this->form->addField($data_envio);
     
 
    

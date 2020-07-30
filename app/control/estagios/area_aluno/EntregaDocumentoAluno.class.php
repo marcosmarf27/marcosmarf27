@@ -66,6 +66,8 @@ class EntregaDocumentoAluno extends TPage
         $estagio_id    = new THidden('estagio_id');
         $system_user_id     = new THidden('system_user_id');
         $data_envio = new TDate('data_envio');
+     
+        
         $data_envio->setEditable(FALSE);
         $tipo_doc = new TCombo('tipo_doc');
         $url = new TFile('url');
@@ -90,6 +92,7 @@ class EntregaDocumentoAluno extends TPage
         $this->form->addFields( [new TLabel('Documento')],  [$tipo_doc] );
         $this->form->addFields( [new TLabel('Arquivo')],    [$url] );
 
+        
     
        
         
@@ -109,6 +112,9 @@ class EntregaDocumentoAluno extends TPage
         $this->form->setData($dados);
         
         // make id not editable
+
+        $data_envio->setMask('dd/mm/yyyy');
+        $data_envio->setDatabaseMask('yyyy-mm-dd');
         $id->setEditable(FALSE);
         $estagio_id->setEditable(FALSE);
         $system_user_id->setEditable(FALSE);
@@ -214,6 +220,7 @@ class EntregaDocumentoAluno extends TPage
         $dados->estagio_id = TSession::getValue(__CLASS__.'estagio_documento');
         $dados->system_user_id = TSession::getValue(__CLASS__.'usuario_documento');
         $dados->data_envio = date('d/m/Y');
+     
         
 
         $this->form->setData($dados);
@@ -267,6 +274,7 @@ class EntregaDocumentoAluno extends TPage
             
             // get form data
             $data   = $this->form->getData();
+            $data->data_envio = TDate::convertToMask( $data->data_envio, 'dd/mm/yyyy', 'yyyy-mm-dd');
             
             // store product
             $object = new Documento();

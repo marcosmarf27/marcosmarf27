@@ -42,6 +42,10 @@
         <action>ProfessorFormList</action>
         <icon>fas:angle-right fa-fw</icon>
       </menuitem>
+      <menuitem label="Cadastrar Soluções">
+        <action>SolucaoFormList</action>
+        <icon>fas:angle-right fa-fw</icon>
+      </menuitem>
     </menu>
   </menuitem>
   <menuitem label="Configurações de Estágio">
