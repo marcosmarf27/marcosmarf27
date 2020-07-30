@@ -274,7 +274,7 @@ class EstagioListAluno extends TPage
         $estagio = new Estagio($param['key']);
 
         $estagio->situacao = '3';
-        $estagio->data_rescisao = date('d/m/Y');
+        $estagio->data_rescisao = date('Y-m-d');
         $estagio->store();
 
         TTransaction::close();
