@@ -71,14 +71,15 @@ class PendenciaFormListAluno extends TWindow
         $data_reg = new TDate('data_reg');
         $data_reg->setMask('dd/mm/yyyy');
         $data_reg->setDatabaseMask('yyyy-mm-dd');
-        $tipo_pendencia = new TCombo('tipo_pendencia');
+        $tipo_pendencia = new TDBCombo('tipo_pendencia', 'estagio', 'Solucao', 'id', 'nome');
+       /*  $tipo_pendencia = new TCombo('tipo_pendencia');
         $tipo_pendencia->addItems([ '1' => 'Ausencia de Assinaturas', 
                                         '2' => 'Empresa não conveniada',
                                         '3' => 'Estágio com rasuras',
                                         '4' => 'Aluno não matriculado',
                                         '5' => 'Datas invalidas',
                                         '6' => 'Ausência de Assinaturas',
-                                        '7' => 'Apolice de seguro inválida']);
+                                        '7' => 'Apolice de seguro inválida']); */
         $descricao = new TText('descricao');
         $descricao->setSize('100%', 40);
         $descricao->placeholder = 'Resuma aqui os problemas encontrados';
