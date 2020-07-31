@@ -444,7 +444,7 @@ class EstagioForm extends TPage
                        }
                        
                  
-                        $documento->data_envio = $dados->data_envio[$row];
+                        $documento->data_envio = date('Y-m-d');
                         $documento->system_user_id = TSession::getValue('userid');
                         $documento->estagio_id = $estagio->id;
                 

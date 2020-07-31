@@ -183,6 +183,7 @@ class DocumentoFormList extends TPage
         $dados = $this->form->getData();
         $dados->estagio_id = TSession::getValue('estagio_documento');
         $dados->system_user_id = TSession::getValue('usuario_documento');
+        $dados->data_envio = date('d/m/Y');
 
         $this->form->setData($dados);
 
@@ -235,6 +236,7 @@ class DocumentoFormList extends TPage
             
             // get form data
             $data   = $this->form->getData();
+            $data->data_envio = TDate::convertToMask( $data->data_envio, 'dd/mm/yyyy', 'yyyy-mm-dd');
             
             // store product
             $object = new Documento();
