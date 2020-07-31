@@ -8,7 +8,7 @@ class Teste extends TPage
         parent::__construct();
 
         $replaces = [];
-        $replaces['nome'] = 'Marcos Antônio';
+        $replaces['nome'] = 'Marcos Antônio 3';
         $replaces['parecer'] = 'O aluno deve entregar os PDf do estágio';
         $html = new THtmlRenderer('app/resources/tutor/email.html');
         $html->enableSection('main', $replaces);
