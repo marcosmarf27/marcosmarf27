@@ -40,8 +40,8 @@ class DocumentoFormList extends TPage
         parent::setTargetContainer('adianti_right_panel');
 
         if(isset($param['estagio_id']) and isset($param['usuario_id'])){
-        TSession::setValue('estagio_documento', $param['estagio_id']);
-        TSession::setValue('usuario_documento', $param['usuario_id']);
+        TSession::setValue(__CLASS__.'estagio_documento', $param['estagio_id']);
+        TSession::setValue(__CLASS__.'usuario_documento', $param['usuario_id']);
         }
        
         //parent::setSize(0.9, 0.9);
@@ -51,7 +51,7 @@ class DocumentoFormList extends TPage
         $this->setDefaultOrder('id', 'desc'); // define the default order
         $this->setLimit(-1); // turn off limit for datagrid
         $criteria = new TCriteria();
-        $criteria->add(new TFilter('estagio_id','=', TSession::getValue('estagio_documento')));
+        $criteria->add(new TFilter('estagio_id','=', TSession::getValue(__CLASS__.'estagio_documento')));
         $this->setCriteria($criteria);
 
         
@@ -97,6 +97,14 @@ class DocumentoFormList extends TPage
        // $this->form->addActionLink( 'Entregar novo documento',new TAction([$this, 'onClear']), 'fa:eraser red');
        // $this->form->addActionLink( 'Voltar', new TAction(['EstagioList', 'Limpar']), 'fa:arrow-left');
         $this->form->addHeaderActionLink( _t('Close'), new TAction([$this, 'onClose']), 'fa:times red');
+
+        $dados = new stdClass;
+        $dados->estagio_id = TSession::getValue(__CLASS__.'estagio_documento');
+        $dados->system_user_id = TSession::getValue(__CLASS__.'usuario_documento');
+        $dados->data_envio = date('d/m/Y');
+    
+
+        $this->form->setData($dados);
         
         // make id not editable
         $id->setEditable(FALSE);
@@ -178,11 +186,11 @@ class DocumentoFormList extends TPage
 
     public function registraDocumento($param){
 
-        TSession::setValue('estagio_documento', $param['estagio_id']);
-       TSession::setValue('usuario_documento', $param['usuario_id']);
+        TSession::setValue(__CLASS__.'estagio_documento', $param['estagio_id']);
+       TSession::setValue(__CLASS__.'usuario_documento', $param['usuario_id']);
         $dados = $this->form->getData();
-        $dados->estagio_id = TSession::getValue('estagio_documento');
-        $dados->system_user_id = TSession::getValue('usuario_documento');
+        $dados->estagio_id = TSession::getValue(__CLASS__.'estagio_documento');
+        $dados->system_user_id = TSession::getValue(__CLASS__.'usuario_documento');
         $dados->data_envio = date('d/m/Y');
 
         $this->form->setData($dados);
@@ -198,8 +206,8 @@ class DocumentoFormList extends TPage
         
       //  TSession::setValue('usuario', $param['id_user']);
         $dados = $this->form->getData();
-        $dados->estagio_id = TSession::getValue('estagio_documento');
-        $dados->system_user_id = TSession::getValue('usuario_documento');
+        $dados->estagio_id = TSession::getValue(__CLASS__.'estagio_documento');
+        $dados->system_user_id = TSession::getValue(__CLASS__.'usuario_documento');
 
         $this->form->setData($dados);
 

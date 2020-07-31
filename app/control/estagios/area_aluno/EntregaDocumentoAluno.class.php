@@ -107,7 +107,7 @@ class EntregaDocumentoAluno extends TPage
         $dados->estagio_id = TSession::getValue(__CLASS__.'estagio_documento');
         $dados->system_user_id = TSession::getValue(__CLASS__.'usuario_documento');
         $dados->data_envio = date('d/m/Y');
-        $dados->tipo_doc = '5';
+       
 
         $this->form->setData($dados);
         
