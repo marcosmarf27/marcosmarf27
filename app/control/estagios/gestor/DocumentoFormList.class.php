@@ -19,6 +19,7 @@ use Adianti\Widget\Form\TText;
  * @copyright  Copyright (c) 2006 Adianti Solutions Ltd. (http://www.adianti.com.br)
  * @license    http://www.adianti.com.br/framework-license
  */
+//DEFINIÇÃO: classe responsável pela visualziaçãoe e edição de documentos do GESTOR.
 class DocumentoFormList extends TPage
 {
     protected $form;      // form
@@ -141,8 +142,27 @@ class DocumentoFormList extends TPage
                     return 'TCE não  obrigatório';
                 break;
                 case 3:
-                    return 'TCE Relatório';
+                    return 'TCE Aditivo';
                     break;
+
+                case 4:
+                        return 'Termo de Rescisão';
+                        break;
+
+                case 5:
+                 return 'Relatório de Estágio';
+                    break;
+
+                 case 6:
+                 return 'Atestado de Matricula';
+                 break;
+
+                 case 7:
+                    return 'Histórico Acadêmico';
+                    break;
+
+                 
+    
             }
 
                 

@@ -20,6 +20,8 @@ use Adianti\Widget\Form\TText;
  * @copyright  Copyright (c) 2006 Adianti Solutions Ltd. (http://www.adianti.com.br)
  * @license    http://www.adianti.com.br/framework-license
  */
+
+ //DEFINIÇÃO: classe responsável pela entrega de documentos complementares 
 class EntregaDocumentoAluno extends TPage
 {
     protected $form;      // form
