@@ -28,6 +28,9 @@ class Concedente extends TRecord
         parent::addAttribute('validade_ini');
         parent::addAttribute('validade_fim');
         parent::addAttribute('tipo');
+        parent::addAttribute('arquivo');
+        parent::addAttribute('pendencia');
+        parent::addAttribute('cnpj');
 
     }
 

@@ -1,18 +1,11 @@
 <menu>
     <menuitem label='Serviços'>
         <menu>
-            <menuitem label='Public page 1'>
+            <menuitem label='Consulta de Convênios'>
                 <icon></icon>
-                <action>PublicView</action>
+                <action>ConvenioList</action>
             </menuitem>
-            <menuitem label='Public page 2'>
-                <icon></icon>
-                <action>PublicView</action>
-            </menuitem>
-            <menuitem label='Public page 3'>
-                <icon></icon>
-                <action>PublicView</action>
-            </menuitem>
+           
         </menu>
     </menuitem>
     

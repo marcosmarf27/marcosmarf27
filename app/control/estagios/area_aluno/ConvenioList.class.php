@@ -9,7 +9,7 @@
  * @copyright  Copyright (c) 2006 Adianti Solutions Ltd. (http://www.adianti.com.br)
  * @license    http://www.adianti.com.br/framework-license
  */
-class ConcedenteList extends TPage
+class ConvenioList extends TPage
 {
     protected $form;     // registration form
     protected $datagrid; // listing
@@ -32,19 +32,19 @@ class ConcedenteList extends TPage
         $this->setDefaultOrder('id', 'desc');  // define the default order
         
         // creates the form
-        $this->form = new BootstrapFormBuilder('form_search_City');
+        $this->form = new BootstrapFormBuilder('form_search_convenio');
         $this->form->setFormTitle('Lista de Empresas');
         
         $nome = new TEntry('nome');
-        $this->form->addFields( [new TLabel('Name:')], [$nome] );
+        $this->form->addFields( [new TLabel('Nome:')], [$nome] );
         
         // add form actions
         $this->form->addAction('Buscar', new TAction([$this, 'onSearch']), 'fa:search blue');
-        $this->form->addActionLink('Novo',  new TAction(['ConcedenteForm', 'onClear']), 'fa:plus-circle green');
+       
         $this->form->addActionLink('Limpar',  new TAction([$this, 'clear']), 'fa:eraser red');
         
         // keep the form filled with the search data
-        $this->form->setData( TSession::getValue('ConcedenteForm_filter_data') );
+        $this->form->setData( TSession::getValue('ConvenioList_filter_data') );
         
         // creates the DataGrid
         $this->datagrid = new BootstrapDatagridWrapper(new TDataGrid);
@@ -68,17 +68,7 @@ class ConcedenteList extends TPage
 
       $col_situacao->setTransformer(array($this, 'Ajustar'));
      
-        
-        $col_id->setAction( new TAction([$this, 'onReload']),   ['order' => 'id']);
-        $col_name->setAction( new TAction([$this, 'onReload']), ['order' => 'nome']);
-        
-        $action1 = new TDataGridAction(['ConcedenteForm', 'onEdit'],   ['key' => '{id}'] );
-        $action2 = new TDataGridAction([$this, 'onDelete'],   ['key' => '{id}'] );
-        $action3 = new TDataGridAction(['ListEstagioEmpresa', 'onReload'],   ['key' => '{id}'] );
-        
-        $this->datagrid->addAction($action1, 'Editar',   'far:edit blue');
-        $this->datagrid->addAction($action2, 'Deletar', 'far:trash-alt red');
-        $this->datagrid->addAction($action3, 'Ver Estágios', 'fas:eye fa-fw');
+       
         
         // create the datagrid model
         $this->datagrid->createModel();

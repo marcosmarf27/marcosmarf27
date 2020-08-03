@@ -4,6 +4,7 @@ use Adianti\Database\TTransaction;
 use Adianti\Widget\Form\TCombo;
 use Adianti\Widget\Form\TDate;
 use Adianti\Widget\Form\TFile;
+use Adianti\Widget\Form\THidden;
 
 /**
  * StandardFormView Registration
@@ -15,7 +16,7 @@ use Adianti\Widget\Form\TFile;
  * @copyright  Copyright (c) 2006 Adianti Solutions Ltd. (http://www.adianti.com.br)
  * @license    http://www.adianti.com.br/framework-license
  */
-class ConcedenteForm extends TPage
+class EmpresaFormAluno extends TPage
 {
     protected $form; // form
     
@@ -36,55 +37,40 @@ class ConcedenteForm extends TPage
         
         
         // creates the form
-        $this->form = new BootstrapFormBuilder('form_concedente');
+        $this->form = new BootstrapFormBuilder('form_concedente_aluno');
         $this->form->setFormTitle('Cadastro de Empresa');
         $this->form->setClientValidation(true);
         
         
         // create the form fields
-        $id       = new TEntry('id');
+        $id       = new THidden('id');
        
         $nome     = new TEntry('nome');
-        $n_convenio     = new TEntry('n_convenio');
-        $validade_ini = new TDate('validade_ini');
-        $validade_ini->setMask('dd/mm/yyyy');
-        $validade_ini->setDatabaseMask('yyyy-mm-dd');
-        $validade_fim = new TDate('validade_fim');
-        $validade_fim->setMask('dd/mm/yyyy');
-        $validade_fim->setDatabaseMask('yyyy-mm-dd');
-        $situacao = new TCombo('situacao');
-        $situacao->addItems(['1' => 'Não conveniada', '2' => 'Conveniada', '3' => 'Processando', '4' => 'Com problemas']);
+       
+      
+    
+     
+       
         $tipo = new TCombo('tipo');
-        $tipo->addItems(['1' => 'Empresa/Instituição', '2' => 'Projeto/Bolsa', '3' => 'Profissional único']);
+        $tipo->addItems(['1' => 'Empresa/Instituição', '3' => 'Profissional único']);
         $cidade_id = new TDBCombo('cidade_id', 'estagio', 'Cidade', 'id', 'nome');
         $cidade_id->enableSearch();
         $representante     = new TEntry('representante');
         $email     = new TEntry('email');
         $telefone     = new TEntry('telefone');
-        $cnpj     = new TEntry('cnpj');
-        $cnpj->setMask('99.999.999/9999-99');
         $endereco     = new TEntry('endereco');
         $arquivo     = new TFile('arquivo');
+        $cnpj     = new TEntry('cnpj');
+        $cnpj->setMask('99.999.999/9999-99');
         $arquivo->enableFileHandling();
         $arquivo->enablePopover();
-        $endereco->placeholder = 'Escreva endereço, numero, bairro';
-        $pendencia = new THtmlEditor('pendencia');
-        $pendencia->setSize('100%', 500);
-        
-        
-     
-
-
-        $replaces = [];
       
+        
+        
      
 
-        $html = new THtmlRenderer('app/resources/tutor/template_pendencia.html');
-        $html->enableSection('main', $replaces);
 
-  $teste = $html->getContents();
-
-        $pendencia->setValue($teste);
+       
         
 
         $telefone->setMask('(99)99999-9999');
@@ -102,9 +88,9 @@ class ConcedenteForm extends TPage
         // add the form fields
 
         $this->form->appendPage('Dados básicos');
-        $this->form->addFields( [new TLabel('ID')], [$id],  [new TLabel('Situação')], [$situacao],  [new TLabel('Tipo')], [$tipo]);
-        $this->form->addFields( [new TLabel('Nome')], [$nome],  [new TLabel('CNPJ')], [$cnpj]  );
-        $this->form->addFields( [new TLabel('E-mail')], [$email] );
+        $this->form->addFields( [$id]);
+        $this->form->addFields( [new TLabel('Nome')], [$nome],  [new TLabel('Tipo')], [$tipo] );
+        $this->form->addFields( [new TLabel('E-mail')], [$email], [new TLabel('CNPJ')], [$cnpj] );
         $this->form->addFields( [new TLabel('Telefone')], [$telefone] );
         $this->form->addFields( [new TLabel('Representante')], [$representante] );
        
@@ -113,16 +99,6 @@ class ConcedenteForm extends TPage
        
        
 
-        $this->form->appendPage('Dados Convênio');
-
-        $this->form->addFields( [new TLabel('Nº Convênio')], [$n_convenio] );
-        $this->form->addFields( [new TLabel('Data inicio')], [$validade_ini] );
-        $this->form->addFields( [new TLabel('Data Término')], [$validade_fim] );
-
-        
-        $this->form->appendPage('Parecer do convênio');
-
-        $this->form->addFields( [new TLabel('Avaliação procuradoria')], [$pendencia] );
      
    
 
@@ -135,7 +111,7 @@ class ConcedenteForm extends TPage
         // define the form action
         $this->form->addAction('Salvar', new TAction(array($this, 'onSave')), 'fa:save green');
         $this->form->addActionLink('Limpar',  new TAction(array($this, 'onClear')), 'fa:eraser red');
-        $this->form->addActionLink('Listar Empresas',  new TAction(array('ConcedenteList', 'onReload')), 'fa:table blue');
+       
         // wrap the page content using vertical box
         $vbox = new TVBox;
         $vbox->style = 'width: 100%';
@@ -155,6 +131,7 @@ class ConcedenteForm extends TPage
             
             // get form data
             $data   = $this->form->getData();
+            $data->situacao = '3';
           
             
             // store product
@@ -164,6 +141,7 @@ class ConcedenteForm extends TPage
             
             // copy file to target folder
             $this->saveFile($object, $data, 'arquivo', 'files/estagios');
+        
             
           
             

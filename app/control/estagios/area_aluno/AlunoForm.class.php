@@ -56,6 +56,7 @@ class AlunoForm extends TPage
         $endereco->placeholder = 'Escreva endereço, numero, bairro';
 
         $telefone->setMask('(99)99999-9999');
+        $matricula->setMask('9999999999');
         $email->addValidation('email', new TEmailValidator);
         $cidade_id->enableSearch();
 

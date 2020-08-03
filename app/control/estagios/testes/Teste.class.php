@@ -40,6 +40,8 @@ class Teste extends TPage
         MailService::send( 'marcosmarf27@outlook.com', 'Assunto e-mail teste', $html->getContents(), 'html' );
         new TMessage('info', _t('Message sent successfully'));
 
+        SystemNotification::register(1, 'Novo termo recebido', 'Avaliar Termo de Estágio', 'class=EstagioList&method=abrir&termo_id='. $estagio->id, 'Avaliar', 'fa fa-list blue alt');
+
 
 
 //5r74ayrqvp3ds7x50iytoy0r6lw8x4ohizx02b8opleul9r4

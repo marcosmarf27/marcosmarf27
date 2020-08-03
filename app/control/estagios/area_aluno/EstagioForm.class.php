@@ -1,5 +1,6 @@
 <?php
 
+use Adianti\Control\TAction;
 use Adianti\Control\TWindow;
 use Adianti\Database\TTransaction;
 use Adianti\Registry\TSession;
@@ -467,9 +468,9 @@ class EstagioForm extends TPage
            
             
            SystemNotification::register(1, 'Novo termo recebido', 'Avaliar Termo de Estágio', 'class=EstagioList&method=abrir&termo_id='. $estagio->id, 'Avaliar', 'fa fa-list blue alt');
-            
+            $action = new TAction(array('EstagioListAluno', 'onReload'));
             // shows the success message
-            new TMessage('info', 'Registro Salvo com Sucesso!');
+            new TMessage('info', 'Registro Salvo com Sucesso!', $action);
             
             TTransaction::close(); // close the transaction */
         }
