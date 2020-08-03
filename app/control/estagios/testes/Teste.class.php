@@ -1,5 +1,7 @@
 <?php
 
+use Adianti\Widget\Form\TEditorHtml2;
+
 class Teste extends TPage
 {
    
@@ -7,14 +9,40 @@ class Teste extends TPage
     {
         parent::__construct();
 
+        $this->form = new BootstrapFormBuilder;
+        $this->form->setFormTitle( 'form' );
+        
+        // create the form fields
+        $html = new TEditorHtml2('html_text');
+        $html->setSize('100%', 500);
+
+        
+        $this->form->addFields( [$html] );
+
+        $this->form->addAction('Show', new TAction(array($this, 'onShow')), 'far:check-circle green');
+      
+        
+        // wrap the page content using vertical box
+        $vbox = new TVBox;
+        $vbox->style = 'width: 100%; height: 400px';
+       
+        $vbox->add($this->form);
+        parent::add($vbox);
+
         $replaces = [];
         $replaces['nome'] = 'Marcos Antônio 3';
+        $replaces['empresa'] = 'Apodi Tecnologia';
         $replaces['parecer'] = 'O aluno deve entregar os PDf do estágio';
+        $replaces['tipo'] = 'Estágio Obrigatório';
         $html = new THtmlRenderer('app/resources/tutor/email.html');
         $html->enableSection('main', $replaces);
         
-        MailService::send( 'marcosmarf27@gmail.com', 'Assunto e-mail teste', $html->getContents(), 'html' );
+        MailService::send( 'marcosmarf27@outlook.com', 'Assunto e-mail teste', $html->getContents(), 'html' );
         new TMessage('info', _t('Message sent successfully'));
+
+
+
+//5r74ayrqvp3ds7x50iytoy0r6lw8x4ohizx02b8opleul9r4
 
 
 
@@ -23,6 +51,15 @@ class Teste extends TPage
 
 
 
+    }
+
+    public function onShow($param)
+    {
+        $data = $this->form->getData();
+        $this->form->setData($data); // put the data back to the form
+        
+        // show the message
+        new TMessage('info', $data->html_text);
     }
 
     public static function somarHoras(array $array)
