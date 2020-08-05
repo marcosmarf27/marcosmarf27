@@ -38,6 +38,8 @@ class Estagio extends TRecord
         parent::addAttribute('mes');
         parent::addAttribute('estagio_ref');
         parent::addAttribute('data_rescisao');
+        parent::addAttribute('motivo_res');
+        parent::addAttribute('editado');
       
 
         

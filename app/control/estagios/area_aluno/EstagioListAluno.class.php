@@ -5,6 +5,8 @@ use Adianti\Database\TTransaction;
 use Adianti\Registry\TSession;
 use Adianti\Widget\Dialog\TMessage;
 use Adianti\Widget\Form\TCombo;
+use Adianti\Widget\Form\THidden;
+use Adianti\Widget\Form\TText;
 
 /**
  * SaleList
@@ -46,7 +48,7 @@ class EstagioListAluno extends TPage
         // creates a DataGrid
         $this->datagrid = new BootstrapDatagridWrapper(new TDataGrid);
         $this->datagrid->width = '100%';
-        $this->datagrid->enablePopover('Detalhes', '<b>Estágio:</b> {tipo_estagio->nome} <br> <b>Nome:</b> {aluno->nome} <br> <b>Curso:</b> {aluno->curso->nome} <br> <b>Ano:</b> {ano} - <b>Mês:</b> {mes}');
+        $this->datagrid->enablePopover('Detalhes', '<b>Nº doc:</b> {id} <br> <b>Estágio:</b> {tipo_estagio->nome} <br> <b>Nome:</b> {aluno->nome} <br> <b>Curso:</b> {aluno->curso->nome} <br> <b>Ano:</b> {ano} - <b>Mês:</b> {mes}');
        // $this->datagrid->height = '500px';
      
         
@@ -92,11 +94,11 @@ class EstagioListAluno extends TPage
 
   
         $action_aditivo = new TDataGridAction([$this, 'gerarAditivo'],   ['key' => '{id}', 'estagio'=> '{id}', 'register_state' => 'false'] );
-        $action_relatorio = new TDataGridAction([$this, 'gerarRelatorio'],   ['key' => '{id}', 'estagio_id' => '{id}', 'usuario_id' => '{system_user_id}'] );
-        $action_rescisao = new TDataGridAction([$this, 'gerarRescisao'],   ['key' => '{id}'] );
+        $action_relatorio = new TDataGridAction([$this, 'gerarRelatorio'],   ['key' => '{id}', 'estagio_id' => '{id}', 'usuario_id' => '{system_user_id}', 'register_state' => 'false'] );
+        $action_rescisao = new TDataGridAction([$this, 'gerarRescisao'],   ['key' => '{id}', 'register_state' => 'false'] );
         $action_edit = new TDataGridAction(['EstagioForm', 'onEdit'],   ['key' => '{id}', 'estagio_edit' => '{estagio_ref}', 'register_state' => 'false'] );
         $action_ver = new TDataGridAction(['PendenciaFormListAluno', 'registraPendencia'],   ['key' => '{id}', 'estagio_id' => '{id}',  'usuario_id' => '{system_user_id}', 'register_state' => 'false'] );
-        $action_doc = new TDataGridAction([$this, 'entregarDoc'],   ['key' => '{id}', 'estagio_id' => '{id}', 'usuario_id' => '{system_user_id}'] );
+        $action_doc = new TDataGridAction([$this, 'entregarDoc'],   ['key' => '{id}', 'estagio_id' => '{id}', 'usuario_id' => '{system_user_id}', 'register_state' => 'false'] );
         
         $action_edit->setDisplayCondition([$this, 'displayAcao']);
         $action_relatorio->setDisplayCondition([$this, 'displayAcaoR']);
@@ -189,7 +191,7 @@ class EstagioListAluno extends TPage
 
         public function displayAcao( $object )
     {
-        if ($object->tipo_estagio_id == '3')
+        if ($object->tipo_estagio_id == '3' and is_null($object->editado))
         {
             return TRUE;
         }
@@ -197,7 +199,7 @@ class EstagioListAluno extends TPage
     }
     public function displayAcaoR( $object )
     {
-        if ($object->tipo_estagio_id == '1' or $object->tipo_estagio_id == '2')
+        if ($object->tipo_estagio_id == '1' or $object->tipo_estagio_id == '2' or $object->editado == 'S')
         {
             return TRUE;
         }
@@ -206,7 +208,7 @@ class EstagioListAluno extends TPage
 
     public function displayAcaoA( $object )
     {
-        if ($object->tipo_estagio_id == '1' or $object->tipo_estagio_id == '2')
+        if ($object->tipo_estagio_id == '1' or $object->tipo_estagio_id == '2' or $object->editado == 'S')
         {
             return TRUE;
         }
@@ -214,7 +216,7 @@ class EstagioListAluno extends TPage
     }
     public function displayAcaoRE( $object )
     {
-        if ($object->tipo_estagio_id == '1' or $object->tipo_estagio_id == '2')
+        if ($object->tipo_estagio_id == '1' or $object->tipo_estagio_id == '2' or $object->editado == 'S')
         {
             return TRUE;
         }
@@ -231,7 +233,7 @@ class EstagioListAluno extends TPage
     }
     
 
-    public function gerarRescisao($param){
+    /* public function gerarRescisao($param){
 
         $action1 = new TAction(array($this, 'gerarRescisaoEfetivo'));
         // $action2 = new TAction(array($this, 'onAction2'));
@@ -245,6 +247,50 @@ class EstagioListAluno extends TPage
 
     }
 
+
+ */
+
+public static function gerarRescisao( $param )
+{
+try{
+
+    TTransaction::open('estagio');
+    $estagio = new Estagio($param['key']);
+
+    if($estagio){
+        if ($estagio->situacao == '3'){
+            throw new Exception('Termo de Estágio já rescindido!');
+            exit;
+        }
+    }
+    TTransaction::close();
+    // input fields
+    $name   = new TText('motivo_res');
+    $key = new THidden('key');
+    $key->setValue($param['key']);
+  
+  
+    
+    $form = new BootstrapFormBuilder('input_form');
+    $form->addFields( [new TLabel('Motivo')],     [$name] );
+    $form->addFields( [$key] );
+  
+    
+    // form action
+    $form->addAction('Confirmar', new TAction(array(__CLASS__, 'gerarRescisaoEfetivo')), 'fa:save green');
+    
+    // show input dialot
+    new TInputDialog('Informe o motivo da rescisão:', $form);
+
+} catch (Exception $e) // in case of exception
+{
+    // shows the exception error message
+    new TMessage('error', $e->getMessage());
+    
+    // undo all pending operations
+    TTransaction::rollback();
+}
+}
     public function gerarAditivoEfetivo($param){
 
         TTransaction::open('estagio');
@@ -253,11 +299,12 @@ class EstagioListAluno extends TPage
         $estagio->estagio_ref = $estagio->id;
         $estagio->situacao = '1';
         $estagio->tipo_estagio_id  = '3';
+        $estagio->editado = '';
 
         unset($estagio->id);
         $estagio->store();
         TTransaction::close();
-        new TMessage('info', 'Agora bastar <b>EDITAR</b> o termo de aditivo com as novas informações.');
+        new TMessage('info', 'Agora bastar <b>EDITAR</> o termo de aditivo com as novas informações.');
         AdiantiCoreApplication::loadPage('EstagioListAluno', 'onReload', $param);
         
 
@@ -267,7 +314,7 @@ class EstagioListAluno extends TPage
 
     }
 
-    public function gerarRescisaoEfetivo($param){
+    public static function gerarRescisaoEfetivo($param){
 
 
         TTransaction::open('estagio');
@@ -275,6 +322,7 @@ class EstagioListAluno extends TPage
 
         $estagio->situacao = '3';
         $estagio->data_rescisao = date('Y-m-d');
+        $estagio->motivo_res = $param['motivo_res'];
         $estagio->store();
 
         TTransaction::close();

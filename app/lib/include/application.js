@@ -1,5 +1,6 @@
 loading = true;
 
+
 Application = {};
 Application.translation = {
     'en' : {

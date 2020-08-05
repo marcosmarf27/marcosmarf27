@@ -45,13 +45,20 @@ class EstagioForm extends TPage
        // $this->form->setClientValidation(true);
         
         $code        = new TEntry('id');
+        $editado = new THidden('editado');
 
-        $filter = new TCriteria;
+        $filter_a = new TCriteria;
         $userid = TSession::getValue('userid');
-        $filter->add(new TFilter('system_user_id', '=', $userid));
-        $aluno_id    = new TDBUniqueSearch('aluno_id', 'estagio', 'Aluno', 'id', 'nome', 'nome',  $filter);
+        $filter_a->add(new TFilter('system_user_id', '=', $userid));
+        
+        $aluno_id    = new TDBUniqueSearch('aluno_id', 'estagio', 'Aluno', 'id', 'nome', 'nome',  $filter_a);
         $aluno_id->setMinLength(1);
-        $concedente_id    = new TDBUniqueSearch('concedente_id', 'estagio', 'Concedente', 'id', 'nome');
+        
+        $filter_c = new TCriteria;
+      
+        $filter_c->add(new TFilter('situacao', '=', '2'));
+        
+        $concedente_id    = new TDBUniqueSearch('concedente_id', 'estagio', 'Concedente', 'id', 'nome', 'nome',  $filter_c);
         $concedente_id->setMinLength(1);
         $professor_id    = new TDBUniqueSearch('professor_id', 'estagio', 'Professor', 'id', 'nome');
         $professor_id->setMinLength(1);
@@ -128,7 +135,7 @@ class EstagioForm extends TPage
         $this->form->addFields( [ new TLabel('Inicio do Estágio') ],      [ $data_ini ], [ new TLabel('Fim do Estágio') ],      [ $data_fim ] );
         $this->form->addFields( [ new TLabel('Tipo de Estágio') ],      [ $tipo_estagio_id ] );
         $this->form->addFields( [ new TLabel('Nº Seguro') ],      [ $apolice ], [ new TLabel('<b>Inicio do Apólice</b>') ],      [ $data_ini_a ], [ new TLabel('Fim do Apólice') ],      [ $data_fim_a ]  );
-        $this->form->addFields( [ new TLabel('Auxílio Transporte (por mês)') ],      [ $valor_transporte ] );
+        $this->form->addFields( [ new TLabel('Auxílio Transporte (por mês)') ],      [ $valor_transporte ],    [ $editado ] );
        
         $this->form->addFields( [ new TLabel('Tipo de Contraprestação') ],      [ $pagamento_id ], [ new TLabel('Valor da Bolsa R$') ],      [ $valor_bolsa ], [ new TLabel('Carga Horária (Horas)') ],      [ $carga_horaria ] );
         
@@ -332,6 +339,7 @@ class EstagioForm extends TPage
             $this->form->validate();
             $dados->system_user_id=  TSession::getValue('userid');
             $dados->situacao = '1';
+            $dados->editado = 'S';
             $dados->valor_bolsa = self::tofloat($dados->valor_bolsa);
             $dados->valor_transporte =self::tofloat( $dados->valor_transporte) ;
 
