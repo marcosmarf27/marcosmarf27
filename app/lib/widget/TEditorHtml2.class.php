@@ -39,16 +39,16 @@ class TEditorHtml2 extends TField implements AdiantiWidgetInterface
     {
         parent::__construct($name);
        // TScript::importFromFile('https://cdn.tiny.cloud/1/5r74ayrqvp3ds7x50iytoy0r6lw8x4ohizx02b8opleul9r4/tinymce/5/tinymce.min.js');
-        $this->id   = 'ttext_' . mt_rand(1000000000, 1999999999);
+        $this->id   = 'TEditorHtml2_' . mt_rand(1000000000, 1999999999);
 
        
         
         // creates a <textarea> tag
         $this->tag = new TElement('textarea');
-        $this->tag->{'class'} = 'tfield';       // CSS
-        $this->tag->{'widget'} = 'ttext';
+             // CSS
+        $this->tag->{'widget'} = 'TEditorHtml2';
         // defines the text default height
-        $this->height= 100;
+       
     }
     
     /**
@@ -156,7 +156,8 @@ class TEditorHtml2 extends TField implements AdiantiWidgetInterface
      */
     public function show()
     {
-        $this->tag->{'name'}  = $this->name;   // tag name
+        $this->tag->{'name'}  = $this->name;  
+         // tag name
         
         if ($this->size)
         {

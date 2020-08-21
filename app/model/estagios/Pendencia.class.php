@@ -8,7 +8,7 @@ class Pendencia extends TRecord
     const TABLENAME = 'ufc_pendencia_estagio';
     const PRIMARYKEY= 'id';
     const IDPOLICY =  'max'; // {max, serial}
-
+    use SystemChangeLogTrait;
    
     
     public function __construct($id = NULL)

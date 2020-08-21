@@ -52,16 +52,16 @@ class EstagioForm extends TPage
         $filter_a->add(new TFilter('system_user_id', '=', $userid));
         
         $aluno_id    = new TDBUniqueSearch('aluno_id', 'estagio', 'Aluno', 'id', 'nome', 'nome',  $filter_a);
-        $aluno_id->setMinLength(1);
+        $aluno_id->setMinLength(0);
         
         $filter_c = new TCriteria;
       
         $filter_c->add(new TFilter('situacao', '=', '2'));
         
         $concedente_id    = new TDBUniqueSearch('concedente_id', 'estagio', 'Concedente', 'id', 'nome', 'nome',  $filter_c);
-        $concedente_id->setMinLength(1);
+        $concedente_id->setMinLength(0);
         $professor_id    = new TDBUniqueSearch('professor_id', 'estagio', 'Professor', 'id', 'nome');
-        $professor_id->setMinLength(1);
+        $professor_id->setMinLength(0);
         $tipo_estagio_id = new TDBCombo('tipo_estagio_id', 'estagio', 'Tipo', 'id', 'nome');
         $apolice      = new TEntry('apolice');
         $data_ini_a  = new TDate('data_ini_a');
@@ -98,6 +98,8 @@ class EstagioForm extends TPage
         $code->setEditable(FALSE);
         $ano->setEditable(FALSE);
         $mes->setEditable(FALSE);
+        $aluno_id->setEditable(FALSE);
+       
         
         $data_ini->setMask('dd/mm/yyyy');
         $data_fim->setMask('dd/mm/yyyy');
@@ -313,7 +315,7 @@ class EstagioForm extends TPage
         
         
         $this->form->addAction( 'Salvar Termo', new TAction([$this, 'onSave'], [ 'static' => '1']), 'fa:save green' );
-        $this->form->addActionLink( 'Novo', new TAction([$this, 'onClear']), 'fa:eraser red' );
+       
         
         // add the form inside the page
         parent::add($this->form);

@@ -8,6 +8,7 @@ class Concedente extends TRecord
     const TABLENAME = 'ufc_concedente';
     const PRIMARYKEY= 'id';
     const IDPOLICY =  'max'; // {max, serial}
+    use SystemChangeLogTrait;
 
     private $cidade;
     

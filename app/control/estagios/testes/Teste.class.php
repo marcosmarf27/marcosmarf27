@@ -1,6 +1,7 @@
 <?php
 
 use Adianti\Widget\Form\TEditorHtml2;
+use Adianti\Widget\Form\THtmlEditor;
 
 class Teste extends TPage
 {
@@ -13,8 +14,8 @@ class Teste extends TPage
         $this->form->setFormTitle( 'form' );
         
         // create the form fields
-        $html = new TEditorHtml2('html_text');
-        $html->setSize('100%', 500);
+        $html = new THtmlEditor('html');
+        $html->setSize('100%', 200);
 
         
         $this->form->addFields( [$html] );
@@ -23,13 +24,10 @@ class Teste extends TPage
       
         
         // wrap the page content using vertical box
-        $vbox = new TVBox;
-        $vbox->style = 'width: 100%; height: 400px';
-       
-        $vbox->add($this->form);
-        parent::add($vbox);
+      
+        parent::add($this->form);
 
-        $replaces = [];
+      /*   $replaces = [];
         $replaces['nome'] = 'Marcos Antônio 3';
         $replaces['empresa'] = 'Apodi Tecnologia';
         $replaces['parecer'] = 'O aluno deve entregar os PDf do estágio';
@@ -39,8 +37,8 @@ class Teste extends TPage
         
         MailService::send( 'marcosmarf27@outlook.com', 'Assunto e-mail teste', $html->getContents(), 'html' );
         new TMessage('info', _t('Message sent successfully'));
-
-        SystemNotification::register(1, 'Novo termo recebido', 'Avaliar Termo de Estágio', 'class=EstagioList&method=abrir&termo_id='. $estagio->id, 'Avaliar', 'fa fa-list blue alt');
+ */
+      //  SystemNotification::register(1, 'Novo termo recebido', 'Avaliar Termo de Estágio', 'class=EstagioList&method=abrir&termo_id='. $estagio->id, 'Avaliar', 'fa fa-list blue alt');
 
 
 
@@ -55,13 +53,17 @@ class Teste extends TPage
 
     }
 
-    public function onShow($param)
+    public static function onShow($param)
     {
-        $data = $this->form->getData();
-        $this->form->setData($data); // put the data back to the form
-        
+      
+     // put the data back to the form
+        echo '<prep>';
+var_dump($param);
+
+
+        echo '</prep>';
         // show the message
-        new TMessage('info', $data->html_text);
+     
     }
 
     public static function somarHoras(array $array)

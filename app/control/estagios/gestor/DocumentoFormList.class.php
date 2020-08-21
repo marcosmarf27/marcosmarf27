@@ -238,15 +238,15 @@ class DocumentoFormList extends TPage
 
     public function verDoc($param){
 
-       
+       parent::openFile( $param['url']);
 
-        $window = TWindow::create('Visualizando documento', 0.8, 0.8);
+       /*  $window = TWindow::create('Visualizando documento', 0.8, 0.8);
             $object = new TElement('object');
             $object->data  = $param['url'];
             $object->type  = 'application/pdf';
             $object->style = "width: 100%; height:calc(100% - 10px)";
             $window->add($object);
-            $window->show();
+            $window->show(); */
     }
     public static function onClose($param)
     {

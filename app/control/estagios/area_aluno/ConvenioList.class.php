@@ -49,17 +49,18 @@ class ConvenioList extends TPage
         // creates the DataGrid
         $this->datagrid = new BootstrapDatagridWrapper(new TDataGrid);
         $this->datagrid->width = "100%";
+        $this->datagrid->datatable= 'true';
         
         // creates the datagrid columns
-        $col_id    = new TDataGridColumn('id', 'Id', 'right', '5%');
+       // $col_id    = new TDataGridColumn('id', 'Id', 'right', '5%');
         $col_name  = new TDataGridColumn('nome', 'Name', 'left', '30%');
-        $col_situacao  = new TDataGridColumn('situacao', 'Status', 'left', '30%');
-        $col_representante= new TDataGridColumn('representante', 'Representante', 'left', '20%');
-        $col_email  = new TDataGridColumn('email', 'E-mail', 'left', '20%');
-        $cidade = new TDataGridColumn('cidade->nome', 'Cidade', 'center', '10%');
+        $col_situacao  = new TDataGridColumn('situacao', 'Status', 'left', '25%');
+        $col_representante= new TDataGridColumn('representante', 'Representante', 'left', '15%');
+        $col_email  = new TDataGridColumn('email', 'E-mail', 'left', '15%');
+        $cidade = new TDataGridColumn('cidade->nome', 'Cidade', 'center', '15%');
        
         
-        $this->datagrid->addColumn($col_id);
+       // $this->datagrid->addColumn($col_id);
         $this->datagrid->addColumn($col_name);
         $this->datagrid->addColumn($col_situacao);
         $this->datagrid->addColumn($col_representante);

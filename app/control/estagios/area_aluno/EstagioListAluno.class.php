@@ -48,6 +48,7 @@ class EstagioListAluno extends TPage
         // creates a DataGrid
         $this->datagrid = new BootstrapDatagridWrapper(new TDataGrid);
         $this->datagrid->width = '100%';
+        $this->datagrid->datatable = 'true';
         $this->datagrid->enablePopover('Detalhes', '<b>Nº doc:</b> {id} <br> <b>Estágio:</b> {tipo_estagio->nome} <br> <b>Nome:</b> {aluno->nome} <br> <b>Curso:</b> {aluno->curso->nome} <br> <b>Ano:</b> {ano} - <b>Mês:</b> {mes}');
        // $this->datagrid->height = '500px';
      
@@ -62,7 +63,7 @@ class EstagioListAluno extends TPage
         $column_data_fim    = new TDataGridColumn('data_fim', 'Data Término', 'center', '15%');
         $column_tipo->setDataProperty('style','font-weight: bold');
        
-       
+  
         
         // add the columns to the DataGrid
        // $this->datagrid->addColumn($column_id);

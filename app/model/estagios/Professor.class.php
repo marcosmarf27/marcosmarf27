@@ -8,6 +8,7 @@ class Professor extends TRecord
     const TABLENAME = 'ufc_professor';
     const PRIMARYKEY= 'id';
     const IDPOLICY =  'max'; // {max, serial}
+    use SystemChangeLogTrait;
 
     private $cidade;
     

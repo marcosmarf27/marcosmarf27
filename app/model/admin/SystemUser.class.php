@@ -15,7 +15,7 @@ class SystemUser extends TRecord
     const PRIMARYKEY= 'id';
     const IDPOLICY =  'max'; // {max, serial}
     
-    // use SystemChangeLogTrait;
+     use SystemChangeLogTrait;
     
     private $frontpage;
     private $unit;
