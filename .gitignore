@@ -2,6 +2,10 @@ estagio.ini
 permission.ini
 communication.ini
 application.ini
-
+log.db
+permission.db
+communication.db
+app/database
+app/config
 
 

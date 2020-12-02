@@ -98,7 +98,7 @@ class THtmlEditorSimples extends TField implements AdiantiWidgetInterface
      */
     public static function enableField($form_name, $field)
     {
-        TScript::create( " thtmleditor_enable_field('{$form_name}', '{$field}'); " );
+        TScript::create( " thtmleditor_enable_field_simples('{$form_name}', '{$field}'); " );
     }
     
     /**
@@ -108,7 +108,7 @@ class THtmlEditorSimples extends TField implements AdiantiWidgetInterface
      */
     public static function disableField($form_name, $field)
     {
-        TScript::create( " thtmleditor_disable_field('{$form_name}', '{$field}'); " );
+        TScript::create( " thtmleditor_disable_field_simples('{$form_name}', '{$field}'); " );
     }
     
     /**
@@ -118,7 +118,7 @@ class THtmlEditorSimples extends TField implements AdiantiWidgetInterface
      */
     public static function clearField($form_name, $field)
     {
-        TScript::create( " thtmleditor_clear_field('{$form_name}', '{$field}'); " );
+        TScript::create( " thtmleditor_clear_field_simples('{$form_name}', '{$field}'); " );
     }
     
     /**
@@ -130,7 +130,7 @@ class THtmlEditorSimples extends TField implements AdiantiWidgetInterface
     public static function reloadCompletion($field, $options)
     {
         $options = json_encode($options);
-        TScript::create(" thtml_editor_reload_completion( '{$field}', $options); ");
+        TScript::create(" thtml_editor_reload_completion_simples( '{$field}', $options); ");
     }
     
     /**
@@ -162,12 +162,12 @@ class THtmlEditorSimples extends TField implements AdiantiWidgetInterface
         }
         
         $options_json = json_encode( $options );
-        TScript::create(" thtmleditor_start( '{$this->tag->{'id'}}', '{$this->size}', '{$this->height}', '{$locale}', '{$options_json}' ); ");
+        TScript::create(" thtmleditor_start_simples( '{$this->tag->{'id'}}', '{$this->size}', '{$this->height}', '{$locale}', '{$options_json}' ); ");
         
         // check if the field is not editable
         if (!parent::getEditable())
         {
-            TScript::create( " thtmleditor_disable_field('{$this->formName}', '{$this->name}'); " );
+            TScript::create( " thtmleditor_disable_field_simples('{$this->formName}', '{$this->name}'); " );
         }
     }
 }
