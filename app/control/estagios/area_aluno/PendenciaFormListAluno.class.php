@@ -1,5 +1,6 @@
 <?php
 
+use Adianti\Control\TPage;
 use Adianti\Control\TWindow;
 use Adianti\Database\TTransaction;
 use Adianti\Registry\TSession;
@@ -7,6 +8,7 @@ use Adianti\Widget\Form\TCombo;
 use Adianti\Widget\Form\TDate;
 use Adianti\Widget\Form\THidden;
 use Adianti\Widget\Form\THtmlEditor;
+use Adianti\Widget\Form\THtmlEditorSimples;
 use Adianti\Widget\Form\TText;
 
 /**
@@ -19,7 +21,7 @@ use Adianti\Widget\Form\TText;
  * @copyright  Copyright (c) 2006 Adianti Solutions Ltd. (http://www.adianti.com.br)
  * @license    http://www.adianti.com.br/framework-license
  */
-class PendenciaFormListAluno extends TWindow
+class PendenciaFormListAluno extends TPage
 {
     protected $form;      // form
     protected $datagrid;  // datagrid
@@ -44,7 +46,7 @@ class PendenciaFormListAluno extends TWindow
         
     
        
-        parent::setSize(0.9, 0.9);
+      //  parent::setSize(0.9, 0.9);
         
         $this->setDatabase('estagio'); // define the database
         $this->setActiveRecord('Pendencia'); // define the Active Record
@@ -81,10 +83,14 @@ class PendenciaFormListAluno extends TWindow
                                         '6' => 'Ausência de Assinaturas',
                                         '7' => 'Apolice de seguro inválida']); */
         $descricao = new TText('descricao');
-        $descricao->setSize('100%', 40);
+        $descricao->setSize('100%', 200);
+        $descricao->style = "background-color: #E7E2E1";
+        //$descricao->setEditable(FALSE);
         $descricao->placeholder = 'Resuma aqui os problemas encontrados';
-       $parecer = new THtmlEditor('parecer');
-       $parecer->setSize('100%', 200);
+       $parecer = new THtmlEditorSimples('parecer');
+       $parecer->setSize('100%', 800);
+
+     
 
       
      

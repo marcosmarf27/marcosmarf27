@@ -15,12 +15,16 @@
         <action>AlunoForm#method=Editar</action>
         <icon>fas:address-book fa-fw</icon>
       </menuitem>
-      <menuitem label="Solicitar Convênio">
-        <action>EmpresaFormAluno</action>
+      <menuitem label="Convênios">
+        <action></action>
         <icon>fas:chalkboard-teacher fa-fw</icon>
         <menu>
           <menuitem label="Lista de Convênios">
             <action>ConvenioList</action>
+            <icon>fas:align-left fa-fw</icon>
+          </menuitem>
+          <menuitem label="Solicitar Convênio">
+            <action>EmpresaFormAluno</action>
             <icon>fas:align-left fa-fw</icon>
           </menuitem>
         </menu>

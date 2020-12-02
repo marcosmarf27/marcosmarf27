@@ -15,7 +15,8 @@ class Teste extends TPage
         
         // create the form fields
         $html = new THtmlEditor('html');
-        $html->setSize('100%', 200);
+        $html->setSize('100%', 600);
+        //$html->setEditable(FALSE);
 
         
         $this->form->addFields( [$html] );
@@ -53,9 +54,10 @@ class Teste extends TPage
 
     }
 
-    public static function onShow($param)
+    public function onShow($param)
     {
-      
+     
+      $this->form->setData( $this->form->getData());
      // put the data back to the form
         echo '<prep>';
 var_dump($param);

@@ -1,10 +1,21 @@
 <?php
 
-use Adianti\Database\TTransaction;
-use Adianti\Widget\Form\TCombo;
+use Adianti\Control\TPage;
+use Adianti\Control\TAction;
 use Adianti\Widget\Form\TDate;
 use Adianti\Widget\Form\TFile;
+use Adianti\Widget\Form\TCombo;
+use Adianti\Widget\Form\TEntry;
+use Adianti\Widget\Form\TLabel;
 use Adianti\Widget\Form\THidden;
+use Adianti\Database\TTransaction;
+use Adianti\Widget\Container\TVBox;
+use Adianti\Widget\Dialog\TMessage;
+use Adianti\Widget\Wrapper\TDBCombo;
+use Adianti\Validator\TEmailValidator;
+use Adianti\Widget\Util\TXMLBreadCrumb;
+use Adianti\Validator\TRequiredValidator;
+use Adianti\Wrapper\BootstrapFormBuilder;
 
 /**
  * StandardFormView Registration

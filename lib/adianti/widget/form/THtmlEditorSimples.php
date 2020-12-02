@@ -17,7 +17,7 @@ use Adianti\Widget\Form\TField;
  * @copyright  Copyright (c) 2006 Adianti Solutions Ltd. (http://www.adianti.com.br)
  * @license    http://www.adianti.com.br/framework-license
  */
-class THtmlEditor extends TField implements AdiantiWidgetInterface
+class THtmlEditorSimples extends TField implements AdiantiWidgetInterface
 {
     protected $id;
     protected $size;

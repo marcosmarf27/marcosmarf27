@@ -1,7 +1,19 @@
 <?php
 
+use Adianti\Control\TPage;
+use Adianti\Control\TAction;
 use Adianti\Registry\TSession;
+use Adianti\Widget\Form\TEntry;
+use Adianti\Widget\Form\TLabel;
 use Adianti\Widget\Form\THidden;
+use Adianti\Database\TTransaction;
+use Adianti\Widget\Container\TVBox;
+use Adianti\Widget\Dialog\TQuestion;
+use Adianti\Widget\Wrapper\TDBCombo;
+use Adianti\Validator\TEmailValidator;
+use Adianti\Widget\Util\TXMLBreadCrumb;
+use Adianti\Validator\TRequiredValidator;
+use Adianti\Wrapper\BootstrapFormBuilder;
 
 /**
  * StandardFormView Registration
@@ -45,6 +57,7 @@ class AlunoForm extends TPage
         $userid = TSession::getValue('userid');
         $system_user_id       = new THidden('system_user_id');
         $system_user_id->setValue($userid);
+       
         
         $matricula       = new TEntry('matricula');
         $nome     = new TEntry('nome');
@@ -54,7 +67,7 @@ class AlunoForm extends TPage
         $telefone     = new TEntry('telefone');
         $endereco     = new TEntry('endereco');
         $endereco->placeholder = 'Escreva endereço, numero, bairro';
-
+      
         $telefone->setMask('(99)99999-9999');
         $matricula->setMask('9999999999');
         $email->addValidation('email', new TEmailValidator);
@@ -112,6 +125,7 @@ class AlunoForm extends TPage
                 $aluno->system_user_id =  TSession::getValue('userid');
                 
                 $aluno->store();
+              
                     
                 $aluno_cadastrado = Aluno::where('system_user_id', '=', TSession::getValue('userid'))->load();
          /*    echo '<pre>';

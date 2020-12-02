@@ -1,12 +1,26 @@
 <?php
 
-use Adianti\Core\AdiantiCoreApplication;
-use Adianti\Database\TTransaction;
+
+
+use Adianti\Control\TPage;
+use Adianti\Control\TAction;
+use Adianti\Database\TFilter;
 use Adianti\Registry\TSession;
-use Adianti\Widget\Dialog\TMessage;
+use Adianti\Widget\Form\TText;
+use Adianti\Database\TCriteria;
 use Adianti\Widget\Form\TCombo;
 use Adianti\Widget\Form\THidden;
-use Adianti\Widget\Form\TText;
+use Adianti\Database\TTransaction;
+use Adianti\Widget\Container\TVBox;
+use Adianti\Widget\Dialog\TMessage;
+use Adianti\Widget\Dialog\TQuestion;
+use Adianti\Widget\Datagrid\TDataGrid;
+use Adianti\Widget\Util\TXMLBreadCrumb;
+use Adianti\Core\AdiantiCoreApplication;
+use Adianti\Widget\Datagrid\TDataGridAction;
+use Adianti\Widget\Datagrid\TDataGridColumn;
+use Adianti\Widget\Datagrid\TPageNavigation;
+use Adianti\Wrapper\BootstrapDatagridWrapper;
 
 /**
  * SaleList
@@ -95,25 +109,26 @@ class EstagioListAluno extends TPage
 
   
         $action_aditivo = new TDataGridAction([$this, 'gerarAditivo'],   ['key' => '{id}', 'estagio'=> '{id}', 'register_state' => 'false'] );
-        $action_relatorio = new TDataGridAction([$this, 'gerarRelatorio'],   ['key' => '{id}', 'estagio_id' => '{id}', 'usuario_id' => '{system_user_id}', 'register_state' => 'false'] );
+      //  $action_relatorio = new TDataGridAction([$this, 'gerarRelatorio'],   ['key' => '{id}', 'estagio_id' => '{id}', 'usuario_id' => '{system_user_id}', 'register_state' => 'false'] );
         $action_rescisao = new TDataGridAction([$this, 'gerarRescisao'],   ['key' => '{id}', 'register_state' => 'false'] );
         $action_edit = new TDataGridAction(['EstagioForm', 'onEdit'],   ['key' => '{id}', 'estagio_edit' => '{estagio_ref}', 'register_state' => 'false'] );
         $action_ver = new TDataGridAction(['PendenciaFormListAluno', 'registraPendencia'],   ['key' => '{id}', 'estagio_id' => '{id}',  'usuario_id' => '{system_user_id}', 'register_state' => 'false'] );
         $action_doc = new TDataGridAction([$this, 'entregarDoc'],   ['key' => '{id}', 'estagio_id' => '{id}', 'usuario_id' => '{system_user_id}', 'register_state' => 'false'] );
         
         $action_edit->setDisplayCondition([$this, 'displayAcao']);
-        $action_relatorio->setDisplayCondition([$this, 'displayAcaoR']);
+      //  $action_relatorio->setDisplayCondition([$this, 'displayAcaoR']);
         $action_aditivo->setDisplayCondition([$this, 'displayAcaoA']);
         $action_rescisao->setDisplayCondition([$this, 'displayAcaoRE']);
         $action_ver->setDisplayCondition([$this, 'displayAcaoVer']);
       
-
+        
+        $this->datagrid->addAction($action_doc, '<b>Documentos</b> - adicionar/listar documentos', 'fa:list-alt blue');
         $this->datagrid->addAction($action_aditivo, '<b>Termo de Aditivo</b> - Registrar Aditivo', 'far:clone green');
-        $this->datagrid->addAction($action_relatorio, '<b>Relatório</b> - Entregar relatório', 'fas:book fa-fw');
+       // $this->datagrid->addAction($action_relatorio, '<b>Relatório</b> - Entregar relatório', 'fas:book fa-fw');
        $this->datagrid->addAction($action_rescisao, '<b>Rescisão</b> - Registrar Rescisão', 'fa:power-off orange'); 
        $this->datagrid->addAction($action_edit, '<b>Editar</b> - Informe as novos dados', 'far:edit blue fa-fw');
        $this->datagrid->addAction($action_ver, '<b>Ver</b> - Ver pendências/soluções', 'fas:eye fa-fw');
-       $this->datagrid->addAction($action_doc, '<b>Documentos</b> - Entregar documentos complementares', 'fas:file-upload fa-fw');
+     //  $this->datagrid->addAction($action_doc, '<b>Documentos</b> - Entregar documentos complementares', 'fas:file-upload fa-fw');
 
 
         $this->datagrid->createModel();

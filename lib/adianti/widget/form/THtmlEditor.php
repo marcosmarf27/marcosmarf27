@@ -162,12 +162,12 @@ class THtmlEditor extends TField implements AdiantiWidgetInterface
         }
         
         $options_json = json_encode( $options );
-        TScript::create(" thtmleditor_start( '{$this->tag->{'id'}}', '{$this->size}', '{$this->height}', '{$locale}', '{$options_json}' ); ");
+        TScript::create(" thtmleditor_start( '{$this->tag->{'id'}}', '{$this->size}', '{$this->height}', '{$locale}', '{$options_json}' ); ", TRUE, 300);
         
         // check if the field is not editable
         if (!parent::getEditable())
         {
-            TScript::create( " thtmleditor_disable_field('{$this->formName}', '{$this->name}'); " );
+            TScript::create( " thtmleditor_disable_field('{$this->tag->{'id'}}'); " );
         }
     }
 }
