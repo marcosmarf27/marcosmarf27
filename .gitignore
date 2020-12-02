@@ -5,7 +5,9 @@ application.ini
 log.db
 permission.db
 communication.db
-app/database
-app/config
+app/database/
+app/config/
+*.db
+*.sql
 
 
