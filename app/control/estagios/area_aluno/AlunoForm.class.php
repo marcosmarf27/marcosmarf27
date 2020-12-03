@@ -73,13 +73,7 @@ class AlunoForm extends TPage
         $email->addValidation('email', new TEmailValidator);
         $cidade_id->enableSearch();
 
-        /* parent::addAttribute('nome');
-        parent::addAttribute('matricula');
-        parent::addAttribute('email');
-        parent::addAttribute('curso_id');
-        parent::addAttribute('telefone');
-        parent::addAttribute('cidade_id');
-        parent::addAttribute('endereco'); */
+      
         $id->setEditable(FALSE);
         
         // add the form fields
