@@ -1,7 +1,12 @@
 <?php
 
-use Adianti\Widget\Form\TEditorHtml2;
+
+use Adianti\Control\TPage;
+use Adianti\Control\TAction;
+use Adianti\Widget\Dialog\TMessage;
 use Adianti\Widget\Form\THtmlEditor;
+use Adianti\Wrapper\BootstrapFormBuilder;
+use Adianti\Widget\Template\THtmlRenderer;
 
 class Teste extends TPage
 {
@@ -43,12 +48,12 @@ class Teste extends TPage
 
 
 
-//5r74ayrqvp3ds7x50iytoy0r6lw8x4ohizx02b8opleul9r4
 
 
 
 
-// This will output the barcode as HTML output to display in the browser
+
+
 
 
 
@@ -57,14 +62,14 @@ class Teste extends TPage
     public function onShow($param)
     {
      
-      $this->form->setData( $this->form->getData());
-     // put the data back to the form
+        $this->form->setData( $this->form->getData());
+        
         echo '<prep>';
-var_dump($param);
-
-
+        var_dump($param);
         echo '</prep>';
-        // show the message
+
+
+       
      
     }
 
@@ -72,25 +77,28 @@ var_dump($param);
     {
        
 
-        $baseDate = clone $date = DateTime::createFromFormat('H:i:s' , '00:00:00');
+         $baseDate = clone $date = DateTime::createFromFormat('H:i:s' , '00:00:00');
+         foreach($array as $time)
+         {
+             //cria-se o date time com o tempo informado
+             $dateTime = DateTime::createFromFormat('H:i' , $time);
+ 
+             //realiza o diff com a $baseDate para criar o DateInterval
+             $diff = $baseDate->diff($dateTime);
+ 
+             //adiciona o diff ao DateTime que somará o tempo
+             $date->add($diff);
+         }
+ 
+
+             $interval = $baseDate->diff($date);
+             $hours = $interval->format('%H') + ($interval->format('%a') * 24);
+             
+             //exibe o tempo
+             return $hours.$interval->format(':%I'); // Saída: 28:23
 
    
 
-//percorre cada valor do array
-foreach($array as $time)
-{
-    //cria-se o date time com o tempo informado
-    $dateTime = DateTime::createFromFormat('H:i' , $time);
-
-    //realiza o diff com a $baseDate para criar o DateInterval
-    $diff = $baseDate->diff($dateTime);
-
-    //adiciona o diff ao DateTime que somará o tempo
-    $date->add($diff);
-}
-
-//realiza o último diff entre o DateTime de soma e a base date
-$interval = $baseDate->diff($date);
 
 
 
@@ -98,10 +106,6 @@ $interval = $baseDate->diff($date);
   
   
 
-//DateInterval mantêm em dias (%a) tudo que for acima de 24 horas.
- $hours = $interval->format('%H') + ($interval->format('%a') * 24);
 
-//exibe o tempo
-return $hours.$interval->format(':%I'); // Saída: 28:23
     }
 }
