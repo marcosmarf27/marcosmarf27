@@ -142,7 +142,7 @@ class EstagioListAluno extends TPage
         $container->style = 'width: 100%';
         $container->add(new TXMLBreadCrumb('menu.xml', __CLASS__));
         $container->add($this->form);
-        $container->add($panel = TPanelGroup::pack('', $this->datagrid, $this->pageNavigation));
+        $container->add($panel = TPanelGroup::pack('', $this->datagrid));
         $panel->getBody()->style = 'overflow-x:auto';
         parent::add($container);
     }
@@ -200,7 +200,7 @@ class EstagioListAluno extends TPage
 //$action2->setParameter('parameter', 2);
         
         // shows the question dialog
-        new TQuestion('Deseja entregar novo documento ?', $action1);
+        new TQuestion('Acessar documentos do estágio?', $action1);
 
 
     }
