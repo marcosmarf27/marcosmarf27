@@ -8,6 +8,9 @@ html, body
     line-height: 1.42857143;
     color: #333;
 }
+thead{
+    background: #2196F3 !important;
+}
 
 hr
 {
@@ -154,6 +157,7 @@ ul.navbar-top-links .open>a, ul.navbar-top-links .open>a:hover, ul.navbar-top-li
     padding: .75rem 1.25rem;
     margin-bottom: 0;
     border-bottom: 1px solid rgba(0,0,0,.125);
+   
 }
 
 .panel-heading:first-child {
@@ -440,10 +444,12 @@ table.table[widget="tchecklist"]>tbody>tr>td:first-child
 
 .card-header {
     display: flex;
+
 }
 
 .card-title {
-    font-size: 16px;
+    font-size: 20px;
+    color: #FFFFFF;
 }
 
 
@@ -771,10 +777,11 @@ nav ul.navbar-nav .label-count {
 {
     text-transform: uppercase;
     padding: 10px !important;
+  
 }
 
 .panel-heading{
-    background-color: white;
+    background-color:#2196F3;
 }
 
 .panel-footer
@@ -904,6 +911,7 @@ table.table[widget="tchecklist"]>thead>tr>th>label.checklist-label
 {
     margin-bottom: -10px !important;
 }
+
 
 /** Seek **/
 .tseekbutton

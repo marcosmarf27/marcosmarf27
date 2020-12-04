@@ -154,6 +154,7 @@ ul.navbar-top-links .open>a, ul.navbar-top-links .open>a:hover, ul.navbar-top-li
     padding: .75rem 1.25rem;
     margin-bottom: 0;
     border-bottom: 1px solid rgba(0,0,0,.125);
+   
 }
 
 .panel-heading:first-child {

@@ -46,7 +46,7 @@ class SolucaoFormList extends TPage
         $solucao   = new TText('solucao');
         $solucao->setSize('100%', 100);
         $problema   = new THtmlEditor('problema');
-        $problema->setSize('100%', 200);
+        $problema->setSize('100%', 500);
 
         
         // add the form fields
@@ -72,16 +72,16 @@ class SolucaoFormList extends TPage
         
         // add the columns
         $col_id    = new TDataGridColumn('id', 'Id', 'right', '10%');
-        $col_nome  = new TDataGridColumn('nome', 'Nome', 'left', '20%');
-        $col_siape  = new TDataGridColumn('solucao', 'Siape', 'left', '30%');
-        $col_email = new TDataGridColumn('problema', 'E-mail', 'left', '30%');
+        $col_nome  = new TDataGridColumn('nome', 'Nome', 'left', '40%');
+        $col_siape  = new TDataGridColumn('solucao', 'Siape', 'left', '50%');
+       // $col_email = new TDataGridColumn('problema', 'E-mail', 'left', '30%');
        
         
         
         $this->datagrid->addColumn($col_id);
         $this->datagrid->addColumn($col_nome);
         $this->datagrid->addColumn($col_siape);
-        $this->datagrid->addColumn($col_email);
+       // $this->datagrid->addColumn($col_email);
         
         
         $col_id->setAction( new TAction([$this, 'onReload']),   ['order' => 'id']);
