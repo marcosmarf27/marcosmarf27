@@ -42,6 +42,7 @@ class EstagioForm extends TPage
      
         $this->form = new BootstrapFormBuilder('form_estagio');
         $this->form->setFormTitle('Cadastro de Estágios');
+
        // $this->form->setClientValidation(true);
         
         $code        = new TEntry('id');
@@ -318,7 +319,10 @@ class EstagioForm extends TPage
        
         
         // add the form inside the page
+     
+    
         parent::add($this->form);
+       
     }
     
     /**

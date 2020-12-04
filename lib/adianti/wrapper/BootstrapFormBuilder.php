@@ -747,7 +747,7 @@ class BootstrapFormBuilder implements AdiantiFormInterface
             $tabpanel = new TElement('div');
             $tabpanel->{'role'}  = 'tabpanel';
             $tabpanel->{'class'} = 'tab-pane ' . ( ($tab_counter == $this->current_page) ? 'active' : '' );
-            $tabpanel->{'style'} = 'padding:10px; margin-top: -1px;';
+            $tabpanel->{'style'} = 'padding:10px; margin-top: -1px; overflow-x: auto;';
             if ($tab)
             {
                 $tabpanel->{'style'} .= 'border: 1px solid #DDDDDD';
