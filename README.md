@@ -1,7 +1,7 @@
 <img src="https://raw.githubusercontent.com/MicaelliMedeiros/micaellimedeiros/master/image/computer-illustration.png" min-width="400px" max-width="400px" width="400px" align="right" alt="Computador iuriCode">
 
 <p align="left"> 
- Sou servidor público federal e entusista de <strong>programação web</strong>.<br>
+ Sou servidor público federal e entusiasta de <strong>programação web</strong>.<br>
  Atualmente trabalho na Universidade Federal do Ceará como secretário da Coordenação de Extensão.
 </p>
 
