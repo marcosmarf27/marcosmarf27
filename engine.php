@@ -1,4 +1,9 @@
 <?php
+
+use Adianti\Control\TAction;
+use Adianti\Registry\TSession;
+use Adianti\Widget\Dialog\TMessage;
+use Adianti\Core\AdiantiCoreApplication;
 require_once 'init.php';
 
 // AdiantiCoreApplication::setRouter(array('AdiantiRouteTranslator', 'translate'));

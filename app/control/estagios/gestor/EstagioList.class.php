@@ -48,7 +48,7 @@ class EstagioList extends TPage
         $this->setActiveRecord('Estagio');         // defines the active record
         $this->setDefaultOrder('id', 'desc');    // defines the default order
         $this->addFilterField('id', '=', 'id'); 
-        $this->addFilterField('(SELECT matricula FROM ufc_aluno WHERE ufc_aluno.id = aluno_id)', '=', 'matricula');
+        $this->addFilterField('(SELECT matricula FROM ufc_aluno WHERE id = ufc_estagio.aluno_id)', '=', 'matricula');
         $this->addFilterField('situacao', '=', 'situacao');// filterField, operator, formField
         $this->addFilterField('aluno_id', '=', 'aluno_id'); // filterField, operator, formField
         

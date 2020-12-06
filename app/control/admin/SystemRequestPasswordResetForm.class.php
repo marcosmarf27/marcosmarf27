@@ -1,5 +1,13 @@
 <?php
 use \Firebase\JWT\JWT;
+use Adianti\Control\TPage;
+use Adianti\Control\TAction;
+use Adianti\Widget\Form\TEntry;
+use Adianti\Widget\Base\TElement;
+use Adianti\Widget\Dialog\TMessage;
+use Adianti\Wrapper\BootstrapFormBuilder;
+use Adianti\Core\AdiantiApplicationConfig;
+use Adianti\Widget\Template\THtmlRenderer;
 
 /**
  * SystemRequestPasswordResetForm
@@ -95,6 +103,7 @@ class SystemRequestPasswordResetForm extends TPage
                     $jwt = JWT::encode($token, $key);
                     
                     $referer = $_SERVER['HTTP_REFERER'];
+                   
                     $url = substr($referer, 0, strpos($referer, 'index.php'));
                     $url .= 'index.php?class=SystemPasswordResetForm&method=onLoad&jwt='.$jwt;
                     

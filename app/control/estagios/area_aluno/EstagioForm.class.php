@@ -242,6 +242,7 @@ class EstagioForm extends TPage
                                   '7' => 'Histórico Acadêmico' ]);
        // $obs = new TEntry('obs[]');
         $url = new TFile('url[]');
+        $url->setDisplayMode('file');
        // $url->setDisplayMode('file');
        // $url->enableFileHandling();
       // $data_envio = new TEntry('data_envio[]');
@@ -279,7 +280,7 @@ class EstagioForm extends TPage
         $this->documentos->name  = 'documentos_list';
         $this->documentos->addField( '<b>Tipo de Documento</b>', $tipo_doc, ['width' => '20%']);
       //  $this->documentos->addField( '<b>Observação</b>', $obs,  ['width' => '30%'] );
-        $this->documentos->addField( '<b>Documento</b>', $url,  ['width' => '60%'] );
+        $this->documentos->addField( '<b>Documento</b>', $url,  ['width' => '80%'] );
       //  $this->documentos->addField( '<b>Data de envio</b>', $data_envio,  ['width' => '15%'] );
 
         
