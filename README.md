@@ -6,7 +6,7 @@
 </p>
 
 <p align="left">
-  🦄 Linguagens: <strong>PHP, Javascript, Jquery, Adianti Framework, Xenesus(Básico).</strong>
+  🦄 Linguagens: <strong>PHP, Javascript, Jquery, Adianti Framework, Genexus(Básico).</strong>
 </p>
 
 <p align="left">
