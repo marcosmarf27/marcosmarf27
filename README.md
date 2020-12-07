@@ -10,7 +10,7 @@
 </p>
 
 <p align="left">
-  💼 Ferramentas: <strong>Postgresql, Bootstrap, Docker, Amazon AWS</strong>
+  💼 Ferramentas: <strong>Postgresql, Bootstrap, Docker, Amazon AWS, Git, Linux, Elementor, Wordpress</strong>
 </p>
 
 <p align="left">
